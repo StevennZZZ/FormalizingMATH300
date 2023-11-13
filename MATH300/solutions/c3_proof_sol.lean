@@ -34,11 +34,11 @@ example : -|a| ≤ a ∧ a ≤ |a| := by
 
 -- 3.2 (d) |a|² = a²
 example : |a|^2 = a^2 := by
-  sorry
+  rw [sq_abs]
 
 -- 3.2 (e) |ab|= |a||b|
 example : |a * b| = |a| * |b| := by
-  sorry
+  rw [abs_mul]
 
 -- 3.2 (f) |a| ≤ |b| if and only if −|b| ≤ a ≤ |b|
 example : |a| ≤ |b| ↔ -|b| ≤ a ∧ a ≤ |b| := by
