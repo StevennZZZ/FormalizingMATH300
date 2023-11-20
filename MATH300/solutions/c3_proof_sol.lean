@@ -30,7 +30,7 @@ variable (a b : ℤ)
 
 -- 3.2 (c) −|a| ≤ a ≤ |a|
 example : -|a| ≤ a ∧ a ≤ |a| := by
-  sorry
+  rw [← abs_le]
 
 -- 3.2 (d) |a|² = a²
 example : |a|^2 = a^2 := by
@@ -42,7 +42,7 @@ example : |a * b| = |a| * |b| := by
 
 -- 3.2 (f) |a| ≤ |b| if and only if −|b| ≤ a ≤ |b|
 example : |a| ≤ |b| ↔ -|b| ≤ a ∧ a ≤ |b| := by
-  sorry
+  rw [abs_le]
 
 end -- 3.2
 
