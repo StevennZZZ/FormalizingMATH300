@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATH300 in Lean 4</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 10px;
+            background-color: #f2f2f2;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        section {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        code {
+            color:dodgerblue;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f2f2f2;
+        }
+
+        .unfinished {
+            color:rgb(255, 0, 8);
+            text-decoration-line: underline;
+            text-decoration-style: wavy;
+        }
+
+        .single_command {
+            color:rgb(179, 0, 255);
+        }
+
+        .comment {
+            color:darkgreen;
+        }
+
+        .lines {
+            color:dodgerblue;
+        }
+
+        .box{
+            width: 70px;
+            height: 18px;
+            border: 1px solid black;
+            margin: 0;
+            padding: 0;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>MATH300 in Lean 4</h1>
+    </header>
+
+    <main>
+        <section id="c1">
+            <h2>Chapter 1: Preliminaries</h2>
+            <h3>1.0. Introduction to Lean 4 - Interactive Proof Assistant</h3>
+<p>Congratulations on taking your first step toward writing formal mathematical proofs!</p>
+<p>When I was taking this course and doing the homework, I was always wondering:
+is there a way to verify the proofs I wrote before turning them in? 
+Just like using a calculator to check the derivatives and integrals I took in those calculus problems?</p>
+<p>If you have the same question, then you are in the right place!
+Our amazing mathematicians and computer scientists have developed some useful software tools to construct and verify formal mathematical proofs,
+which we typically call the <strong>proof assistants</strong>,
+and the tool we are gonna use is called the <strong>Lean Theorem Prover</strong>,
+which acts as both a programming language and an interactive proof assistant.
+</p>
+            <h4>1.0.1. Installing Lean 4</h4>
+<p>The version of the Lean theorem prover we will be using is <strong>Lean 4</strong>.
+Follow the instructions <a href="https://leanprover-community.github.io/get_started.html"> here</a> 
+to install Lean 4 and VS Code editor on your computer.
+</p>
+<p class="unfinished">(clone the repository...complete this later)</p>
+<p>Now we are all set. Open the file named "c1.lean" in VS Code.
+Now take a look at the contents of this file. 
+Suddenly, you are able to figure out everything in this file!</p> ...... well, that's not true.
+You might be wondering: what the heck do all these lines of codes mean??
+Don't worry, in this chapter, we will go through every line of code in this file,
+and by the end of this chapter, you will be able to understand everything in it!
+</p>
+            <h4>1.0.2. How to use this guide</h4>
+<p>
+Everything in this guide exactly follows the order of the MATH 300 textbook 
+by Conroy-Taggart: An Introduction to Mathematical Reasoning.
+For each chapter, we will go over the concepts, theorems, and proofs mentioned in the textbook,
+<em>with their implementations in Lean</em>, and we've made a lean file for each chapter
+that contains the codes in this guide,
+so that you can read this guide while checking the codes in Lean interactively.
+</p>
+<p>Now is the time to let you know what we are going to do:
+we will turn the proofs we wrote into Lean code,
+and Lean, as a theorem prover, will produce feedbacks to our inputs
+(i.e., the remaining goals we need to solve in order to complete the proof).
+Keep in mind that Lean is not a forgiving language. 
+Whenever we make a mistake in our proof, whether it's a logical mistake or just a syntax mistake,
+Lean will throw an error immediately (since it's interactive), 
+and we must stop and fix that error in order to make further progress.
+You might get frustrated very often during this learning process,
+but remember, this is also the biggest advantage of Lean: 
+we can be sure that
+the mathematical proofs we construct are absolutely correct.
+And as you get used to it, Lean can not only verify the proofs you wrote,
+but also assist you during the process of writing proofs! (which we will cover later)
+You will never regret learning this new skill :)
+</p>
+<p>Get ready? Then let's start!</p>
+            <h3>1.1. Elementary properties of the integers</h3>
+<dfn><div class="box">Review:</div></dfn>
+<ul>
+    <li><strong><em>statement - </em></strong> a sentence that is either true or false</li>
+    <li><strong><em>proof - </em></strong> a piece of writing that demonstrates that a particular statement is true</li>
+    <li><strong><em>proposition / theorem - </em></strong> a statement that we prove to be true</li>
+    <li><strong><em>axiom - </em></strong> a statement that we assume without proof</li>
+    <li><strong><em>notations for some common sets of numbers- </em></strong> <br>
+        ℕ (natural numbers), ℤ (integers), ℚ (rational numbers), ℝ (real numbers)</li>
+</ul>
+<dfn><div class="box">In Lean:</div></dfn>
+<p>In VS Code, it's easy to <strong>evaluate</strong> the truth value of a simple mathematical statement 
+by using the <code class="single_command">#eval</code> command. 
+Move you cursor over the <code class="single_command">#eval</code> command,
+and in the pop-up window, you can see how Lean evaluates this statement.
+</p>
+<pre><code class="snippet"><div class="comment">--1.1.01</div>
+#eval 1 + 1 = 2
+#eval 1 + 1 = 3
+#eval 2^10 < 2000
+#eval 500 * 20 + 1356^2 - 63794 ≥ 10000
+</code></pre>
+<p>
+For most of the time, we use Lean to construct formal proofs,
+instead of just checking if 1 + 1 = 2.
+In Lean 4 (and for all the exercise problems in this guide), 
+a proof typically has the following structure:
+</p>
+<pre><code class="snippet"><div class="comment">--1.1.02</div>
+example {n : ℝ} (h1 : n = 1) : n + 1 = 2 := by
+  rw [h1]
+  norm_num
+</code></pre>
+<p>Yes, this is a complete mathematical proof in Lean. 
+In this case, it has three lines.
+By looking at the first line of code, can you guess what it's trying to prove?
+</p>
+<p>Here is the interpretation: Let n be a real number.
+If n = 1, then n + 1 = 2. Is your guess correct?
+The first line of a Lean proof always indicates the statement we are trying to prove,
+so let's go through it first.
+</p>
+<em><strong>First Line: </strong></em>
+<code class="snippet">example {n : ℝ} (h1 : n = 1) : n + 1 = 2 := by</code>
+<p><code class="snippet">example</code> means this problem is just an example. 
+Nothing fancy here.</p>
+<p><code class="snippet">{n : ℝ}</code> means "Let n be a real number".
+Many mathematical theorems make use of variables, 
+which we need to put at the very beginning. You can have as many variables as you want,
+like <code class="snippet">{a b c : ℤ}</code> simply means "Suppose a, b, and c are integers".
+</p>
+<p><code class="snippet">(h1 : n = 1)</code> sets up the hypothesis.
+It's the thing we assume to be true before making our statement. 
+Here, "h1" is just the name we give to the hypothesis, 
+and "n = 1" is the thing we assume: if n = 1.
+Again, you can have as many hypotheses as you want.
+Just make sure all the variables you use are already declared in the previous part.
+</p>
+<p>The variable declarations and hypotheses,
+together with the axioms we already know,
+are called the <strong>assumptions</strong>.
+After all the assumptions comes the colon <code class="snippet">:</code>,
+which acts as a boundary line between the <strong>assumptions</strong> we make 
+and the <strong>goal</strong> we are trying to solve.
+There are, of course, some theorems that have no explicit assumptions in the first place,
+which you can simply put a colon after "example": <code class="snippet">example :</code>
+</p>
+<code class="snippet">n + 1 = 2</code> states the goal of the proof.
+In this case, our goal is to prove that "n + 1 = 2".
+</p>
+</p><code class="snippet">:= by</code> just literally means
+"we will prove it by", 
+which marks both the end of the statement and the start of the proof.
+<p>Whoa! That's all the information in the first line of code.
+In VS Code, if you click the end of the first line,
+in the "Lean infoview" window, you should see our hypotheses (before ⊢) and goal (after ⊢) listed in order.
+This window shows the <strong>current proof state</strong> of this example.
+If you click the end of other lines,
+you can see that the proof state changes accordingly,
+which shows the progress that line of code makes to the proof.
+At the last line it shows "no goals",
+which means that we have completed our proof.
+You can see why it's called the "interactive theorem prover".</p>
+<p>
+Alright! Look back to the first line again, can you understand everything now?
+If so, let's dive into the exciting part: prove it!
+</p>
+<em><strong>Second Line: </strong></em>
+<code class="snippet">rw [h1]</code>
+<br>
+<em><strong>Third Line: </strong></em>
+<code class="snippet">norm_num</code>
+<p>
+Before looking at code, think about it:
+how you might prove this theorem: 
+Let n be a real number. If n = 1, then n + 1 = 2. 
+</p>
+<p>
+Well, you might be thinking: 
+do I really need to prove this thing?
+Even an elementary school student can figure this out just in mind!
+But here is the thing:
+in proof-writing (and also in programming),
+we need to demonstrate the logical order exactly.
+We need to break the entire process into single steps 
+and put them in sequence.
+This is especially important when we are using the theorem prover
+because the things we find to be obvious might make no sense to the computer at all!
+We have to show exactly how we solve the problem step by step.
+</p>
+<p>
+So let's slow down a little bit and think: 
+what's the logical order of our thinking.
+Well, we know n = 1 from the assumption, 
+so we can <strong>rewrite</strong> n as 1.
+And if we <strong>normalize</strong> 1 + 1,
+we get 2, thus we prove the theorem.
+These are exactly what 
+<code class="single_command">rw</code>
+and <code class="single_command">norm_num</code>
+commands do.
+</p>
+<p>
+<code class="snippet">rw [h1]</code> means to rewrite the goal based on h1.
+In this case the argument we give to rw is "h1", 
+which is "n = 1", 
+so it will replace all the "n"s in the goal with "1"s.
+Therefore, if you click the end of the line,
+in Lean Infoview window,
+you can see that the goal changes from "n + 1 = 2" to "1 + 1 = 2".
+Be careful about the syntax: 
+you always need to put arguments inside the square brackets.
+</p>
+<p>OK, so how to prove "1 + 1 = 2"?
+We know that it's based on the axioms of algebra.
+As in the examples above, Lean is able to evaluate the calculation results,
+so whenever we see that our goal only involve simple numerical expressions,
+we can let Lean normalize them and prove the goal for us.
+</p>
+<code class="snippet">norm_num</code> closes the goal with only numerical expressions.
+In this case, the goal is "1 + 1 = 2",
+so <code class="snippet">norm_num</code> closes the goal immediately.
+Now we have no goals left in the current proof state.
+We completed our proof!
+</p>
+<dfn><div class="box">Remarks:</div></dfn>
+<ol>
+<li>
+We were implementing what's called the "tactic-style" proof.
+In the example above, both <code class="single_command">rw</code>
+and <code class="single_command">norm_num</code>
+are "tactics" (and they are two of the most common tactics we will be using).
+As we go further, 
+we will need to use more and more tactics to achieve different kinds of goals.
+</li>
+<li>
+If you've taken CSE121 or some other programming courses,
+you instructor might empahsized a lot about "coding style".
+We will not focus on that too much, 
+but it's definitely a good idea to structure you codes in a clean way.
+As in this example, you see that we indent a block of codes that solves a specific goal,
+and we use only one tactic for each line.
+</li>
+<li>
+I just realize that the subtitle of this section is "Elementary properties of the integers",
+but I didn't mention anything about that big table on page 9 of your textbook at all.
+Well, we will go over how those properties are implemented in Lean 4 in this chapter,
+but I need to introduce something else before that.
+</li>
+</ol>
+            <h3>1.2. Definitions</h3>
+<dfn><div class="box">Review:</div></dfn>
+<ur>
+<li>
+<em><strong>definition - </strong></em>an agreement between the writer and the reader as to the meaning of a word or phrase
+</li>
+<li>
+<em><strong>absolute value - </strong></em>Let n be an integer. 
+We define the absolute value of n to be the integer |n| given by
+the multi-part function:
+|n| = n if n ≥ 0; |n| = -n if n < 0.
+</li>
+<li>
+<em><strong>divisibility - </strong></em>Suppose a and b are integers. We say that a divides b or that b is divisible by a and
+write a | b if there exists an integer c such that b = ac. If there exists no such integer c, then we say
+that a does not divide b or that b is not divisible by a and we write a ∤ b.
+</li>
+<li>
+<em><strong>even and odd - </strong></em>An integer a is <strong><em>even</em></strong> if a = 2k for some integer k.
+An integer a is <strong><em>odd</em></strong> if a = 2k + 1 for some integer k.
+</li>
+<li>
+<em><strong>parity - </strong></em>Two integers that are either both even or both odd are said to have the <strong><em>same parity</em></strong>.
+If one integer is even and the other is odd, then the two have <strong><em>opposite parity</em></strong>.
+</li>
+</ur>
+<p><dfn><div class="box">In Lean: </div></dfn>
+Not every mathematical definition is included in Lean 4 by default.
+You can, of course, define everything by yourself in Lean 4
+(which we might cover later),
+but for now let's just use the definitions that others have written
+for the sake of time.
+We usually need to <strong>import</strong> the definitions we want to the Lean file.
+If you have some experience with other programming languages,
+you should've seen things like that lot (e.g. "import java.util.*" in Java, "import numpy as np" in Python).
+But to Lean 4, where should import things from?
+</p>
+            <h4>1.2.0. Mathlib</h4>
+<p><a href="https://leanprover-community.github.io/mathlib4_docs/Mathlib">Mathlib</a> 
+is a super powerful library for Lean 4 that includes all the definitions, theorems, and tactics we need for this course.
+Since we will only deal with real numbers (and mostly with integers),
+we only need to import a small portion of this giant library,
+which is "Mathlib.Data.Real.Basic". 
+This is what the first line of code mean:
+ (you should always put the libaries you want to import at the beginning of the file)
+</p>
+<p>
+<code class="snippet">import Mathlib.Data.Real.Basic</code>
+</p>
+<p>
+Now we have all the definitions we need!
+</p>
+<p>
+In Lean 4, you can use |a| ("shift + \" for |) to represent the absolute value of "a" directly.
+Below is an example of proving that the absolute value of -7 is 7.
+Since the goal consists of only numerical expressions,
+you can use <code class="single_command">norm_num</code> to prove it.
+</p>
+<pre><code class="snippet"><div class="comment">--1.2.01</div>
+example : |-7| = 7 := by
+  norm_num
+</code></pre>
+<p>
+To show that a divides b in Lean 4, you need to type "a ∣ b".
+("\ + |" for "∣" in VS Code).
+By the way, if you wonder how to get some special symbols in VS Code
+("\real" for ℝ, "\nat" for ℕ, etc.), 
+just find some examples with those symbols in the file, 
+hover you cursor over the symbols,
+and a pop-up window well shows you how to type those symbols.
+</p>
+<p>Below is an example that shows how to prove "3 divides 6"</p>
+<pre><code class="snippet"><div class="comment">--1.2.02</div>
+example : 3 ∣ 6 := by
+  use 2
+</code></pre>
+<p>
+Oops! Here comes a new tactic - "use". 
+Let's review the definition of divisibility: 
+Suppose a and b are integers.
+a | b if <em>there exists</em> an integer c such that b = ac.
+In this case, 3 divides 6 because <em>there exists</em> an integer c such that 6 = 3 * c.
+It's obvious that we need to <strong>use</strong> 2 for c in order to prove it,
+which is what the tactic <code class="single_command">use</code> does.
+</p>
+<p>
+The biggest takeaway here is that we can use the <code class="single_command">use</code> tactic 
+to prove anything with a definition that includes phrases like "there exists" or "for some",
+since we <strong>use</strong> a specific number to show that there really <strong>exists</strong> a number that satisfies the definition.
+You might get confused about what I actually mean here. Don't worry!
+It's a concept from the next chapter: quantifier.
+We will talk more about it later.
+</p>
+In Lean 4, you can directly express "a is an odd number" as <code class="single_command">Odd a</code>,
+or "b is an even number" as <code class="single_command">Even b</code>. Very simple.
+Below is a proof of the statement that "20 is an even number":
+<pre><code class="snippet"><div class="comment">--1.2.03</div>
+example : Even 20 := by
+  use 10
+</code></pre>
+An integer a is even if a = 2k for some integer k. 
+Again, this definition includes the phrase "for some", 
+so we need the <code class="single_command">use</code> tactic to give the specific integer that satisfies the definition.
+Here, to prove that 20 is an even number,
+we need to show that 20 = 2 * k for some integer k.
+Clearly, k = 10, so we <code class="single_command">use 10</code>.
+            <h3>1.3. Elementary properties of the integers (again)</h3>
+<p>Now it's time to go back to the table on page 9 of the textbook: Elementary Properties of the Integers (EPIs).</p>
+<p>
+As we have imported a lot of theorems from Mathlib, 
+let's see which Lean 4 command each theorem corresponds to:
+</p>
+<p>
+Suppose a, b, c, and d are integers.
+</p>
+<ol>
+<!--1-->
+<li>
+<em><strong>Closure:</strong></em> a + b and ab are integers.<br>
+In Lean: Good news: You don't have to specify this property in Lean.
+</li>
+<!--2-->
+<li>
+<em><strong>Substitution of Equals:</strong></em> If a = b, then a + c = b + c and ac = bc.<br>
+In Lean: <code class="single_command">congr</code> <br>*
+(This is a tactic. Don't use <code class="single_command">exact</code> for this one.)
+</li>
+<!--3-->
+<li>
+<em><strong>Commutativity: </strong></em>a + b = b + a and ab = ba.<br>
+In Lean: <code class="single_command">add_comm a b</code> for addition, 
+<code class="single_command">mul_comm a b</code> for multiplication.
+</li>
+<!--4-->
+<li>
+<em><strong>Associativity: </strong></em>(a + b) + c = a + (b + c) and (ab)c = a(bc).<br>
+In Lean: <code class="single_command">add_assoc a b c</code> for addition, 
+<code class="single_command">mul_assoc a b c</code> for multiplication.
+</li>
+<!--5-->
+<li>
+<em><strong>The Distributive Law: </strong></em>a(b + c) = ab + ac<br>
+In Lean: <code class="single_command">mul_add a b c</code>
+</li>
+<!--6-->
+<li>
+<em><strong>Identities: </strong></em>a + 0 = 0 + a = a and a · 1 = 1 · a = a.<br>
+(0 is called the <em>additive identity)</em>.<br> (1 is called the <em>multiplicative identity)</em>. <br>
+In Lean:<br> 
+a + 0 = a: <code class="single_command">add_zero a</code><br>
+0 + a = a: <code class="single_command">zero_add a</code><br>
+a · 1 = a: <code class="single_command">mul_one a</code><br>
+1 · a = a: <code class="single_command">one_mul a</code>
+</li>
+<!--7-->
+<li>
+<em><strong>Additive Inverses: </strong></em>There exists an integer −a such that a + (−a) = (−a) + a = 0.<br>
+In Lean: <br>
+a + (-a) = 0: <code class="single_command">add_right_neg a</code><br>
+(-a) + a = 0: <code class="single_command">add_left_neg a</code>
+</li>
+<!--8-->
+<li>
+<em><strong>Trichotomy: </strong></em>Exactly one of the following is true: a > 0, −a > 0, or a = 0.<br>
+In Lean: we will discuss about this property when we work on "proof by cases". (chapter 3)
+</li>
+<!--9-->
+<li>
+<em><strong>The Well-Ordering Principle: </strong></em>Every non-empty set of positive integers contains a smallest ele-
+ment.<br>
+In Lean: we will discuss about this property when we work on "cardinality". (chapter 10)
+</li>
+<!--10-->
+<li>
+a ·0 = 0<br>
+In Lean: <code class="single_command">mul_zero a</code>
+</li>
+<!--11-->
+<li>
+If a + c = b + c, then a = b.<br>
+In Lean: <code class="single_command">add_right_cancel h</code>,
+with <code class="single_command">(h : a + c = b + c)</code>
+</li>
+<!--12-->
+<li>
+−a = (−1) · a <br>
+In Lean: <code class="single_command">neg_eq_neg_one_mul a</code>
+</li>
+<!--13-->
+<li>
+(−a) · b = −(ab) <br>
+In Lean: <code class="single_command">neg_mul a b</code>
+</li>
+<!--14-->
+<li>
+(−a) · (−b) = ab <br>
+In Lean: <code class="single_command">neg_mul_neg a b</code>
+</li>
+<!--15-->
+<li>
+If ab = 0, then a = 0 or b = 0. <br>
+In Lean: <code class="single_command">mul_eq_zero.1 h</code>, 
+with <code class="single_command">(h : a * b = 0)</code>
+</li>
+<!--16-->
+<li>
+If a ≤ b and b ≤ a, then a = b. <br>
+In Lean: <code class="single_command">le_antisymm h1 h2</code>,
+with <code class="single_command">(h1 : a ≤ b) (h2: b ≤ a)</code>
+</li>
+<!--17-->
+<li>
+If a < b and b < c, then a < c. <br>
+In Lean: <code class="single_command">lt_trans h1 h2</code>,
+with <code class="single_command">(h1 : a < b) (h2: b < c)</code><br>
+If a ≤ b and b ≤ c, then a ≤ c. <br>
+In Lean: <code class="single_command">le_trans h1 h2</code>,
+with <code class="single_command">(h1 : a ≤ b) (h2: b ≤ c)</code>
+</li>
+<!--18-->
+<li>
+If a < b, then a + c < b + c. <br>
+In Lean: <code class="single_command">add_lt_add_right h c</code>,
+with <code class="single_command">(h : a < b)</code><br>
+If a ≤ b, then a + c ≤ b + c. <br>
+In Lean: <code class="single_command">add_le_add_right h c</code>,
+with <code class="single_command">(h : a ≤ b)</code>
+</li>
+<!--19-->
+<li>
+If a < b and 0 < c, then ac < bc. <br>
+In Lean: <code class="single_command">mul_lt_mul_of_pos_right h1 h2</code>,
+with <code class="single_command">(h1 : a < b) (h2 : 0 < c)</code><br>
+If a ≤ b and 0 ≤ c, then ac ≤ bc. <br>
+In Lean: <code class="single_command">mul_le_mul_of_nonneg_right h1 h2</code>,
+with <code class="single_command">(h1 : a ≤ b) (h2 : 0 ≤ c)</code>
+</li>
+<!--20-->
+<li>
+If a < b and c < 0, then bc < ac. <br>
+In Lean: <code class="single_command">mul_lt_mul_of_neg_right h1 h2</code>,
+with <code class="single_command">(h1 : a < b) (h2 : c < 0)</code><br>
+If a ≤ b and c ≤ 0, then bc ≤ ac. <br>
+In Lean: <code class="single_command">mul_le_mul_of_nonpos_right h1 h2</code>,
+with <code class="single_command">(h1 : a ≤ b) (h2 : c ≤ 0)</code>
+</li>
+<!--21-->
+<li>
+If a < b and c < d, then a + c < b + d. <br>
+In Lean: <code class="single_command">add_lt_add h1 h2</code>,
+with <code class="single_command">(h1 : a < b) (h2 : c < d)</code><br>
+If a ≤ b and c ≤ d, then a + c ≤ b + d. <br>
+In Lean: <code class="single_command">add_le_add h1 h2</code>,
+with <code class="single_command">(h1 : a ≤ b) (h2 : c ≤ d)</code>
+</li>
+<!--22-->
+<li>
+If 0 ≤ a < b and 0 ≤ c < d, then ac < bd. <br>
+In Lean: <code class="single_command">mul_lt_mul'' h1 h2 h3 h4</code>,
+with <code class="single_command">(h1 : a < b) (h2 : c < d) (h3 : 0 ≤ a)  (h4 : 0 ≤ c)</code><br>
+If 0 ≤ a ≤ b and 0 ≤ c ≤ d, then ac ≤ bd. <br>
+In Lean: <code class="single_command">mul_le_mul h1 h2 h3 h4</code>,
+with <code class="single_command">(h1 : a ≤ b) (h2 : c ≤ d) (h3 : 0 ≤ c)  (h4 : 0 ≤ b) </code>
+</li>
+<!--23-->
+<li>
+If a < b, then −b < −a. <br>
+In Lean: <code class="single_command">neg_lt_neg h</code>,
+with <code class="single_command">(h : a < b)</code><br>
+If a ≤ b, then −b ≤ −a. <br>
+In Lean: <code class="single_command">neg_le_neg h</code>,
+with <code class="single_command">(h : a ≤ b)</code>
+</li>
+<!--24-->
+<li>
+0 ≤ a^2, where a^2 = a · a. <br>
+In Lean: <code class="single_command">sq_nonneg a</code>
+</li>
+<!--25-->
+<li>
+If ab = 1, then either a = b = 1 or a = b = −1. <br>
+In Lean: <code class="single_command">Int.mul_eq_one_iff_eq_one_or_neg_one.1 h</code>,
+with <code class="single_command">(h : a * b = 1)</code> <br>
+*You need to import "Mathlib.Data.Int.Units" in order to use this command.
+</li>
+</ol>
+<dfn><div class="box">Remarks:</div></dfn>
+<p>Alright, alright, I know what you wanna say: what the heeeeeeeck are all these things? That's too much!!!!!</p>
+<p>Well, as you are provided with this table in your homework and exams,
+you are also not required to memorize every command:
+just refer back to it whenever needed.
+</p>
+<p>
+And here comes the second question:
+OK, so now I know all these commands, but how to use them? For example:
+If you are asked to prove that a + b = b + a, where a and b are integers.
+How do you prove it?
+</p>
+<p>
+You stare it for a while and suddenly realize: it's in the EPIs table!
+So you grab that table and find that the goal of your proof is 
+<strong>exactly</strong> the third property: commutativity,
+so you need to use the <code class="single_command">exact</code> tactic.
+This is the fourth tactic we learn in this chapter:
+</p>
+<pre><code class="snippet"><div class="comment">--1.3.01</div>
+example {a b : ℤ} : a + b = b + a := by
+  exact add_comm a b
+</code></pre>
+<p>
+That's it! Each time you find your goal to be <strong>exactly</strong> the same as a theorem in the EPIs table,
+you use <code class="single_command">exact</code> tactic, 
+and copy and paste the command of that property after <code class="single_command">exact</code> .
+</p>
+<p>
+Here is another example:
+</p>
+<pre><code class="snippet"><div class="comment">--1.3.02</div>
+example {a b : ℤ} (h : a < b) : a + 5 < b + 5 := by
+  exact add_lt_add_right h 5
+</code></pre>
+<p>
+(Hint: it's the 18th property.)
+</p>
+<p>
+Since <code class="single_command">exact</code> tactic can be used for anything we already know,
+it can not only be be used for the EPIs table's theorems,
+but also for the assumption that is the same as the goal.
+As a silly example: suppose a is an integer, prove that if a = 1, then a = 1.
+</p>
+<pre><code class="snippet"><div class="comment">--1.3.03</div>
+example {a : ℤ} (h : a = 1) : a = 1 := by
+  exact h
+</code></pre>
+<p>
+Well, the goal is <strong>exactly</strong> the same as the hypothesis, 
+so you can use <code class="single_command">exact</code> here.
+</p>
+<p>
+One last thing before we see a more difficult example and end this chapter:
+<code class="single_command">exact</code> is not the only tactic we can use for citing properties from the EPIs table.
+If the property states something about "equality", 
+then we can also <strong>rewrite</strong> part of the expression to the other side of the equality using your favorite <code class="single_command">rw</code> tactic.
+Let's see an example:
+</p>
+<pre><code class="snippet"><div class="comment">--1.3.04 </div>
+example {a b : ℤ} (h : a + c = b + 0) : a + c = b := by
+  rw [add_zero b] at h
+  exact h
+</code></pre>
+<p>
+Note that you cannot use <code class="single_command">exact</code> directly
+because we are not proving "b + 0 = b" here. We are proving something else
+but need to use the fact that "b + 0 = b", which is the 6th property,
+so the best way we can do is to <strong>rewrite</strong> "b + 0" in the hypothesis h to "b".
+Last time we only use <code class="single_command">rw</code> to change the goal.
+If you want to change the hypothesis you need to add <code class="single_command">at h</code> after the command,
+where "h" is the hypothesis you want to change.
+<code class="single_command">add_zero b</code> gives the fact that "b + 0 = b",
+so <code class="single_command">rw [add_zero b] at h</code>
+searches for "b + 0" in the hypothesis h and replaces it with "b".
+Now the hypothesis h is the same as the goal, so we can use <code class="single_command">exact h</code> to close the goal.
+</p>
+            <h4>1.3.1 Example</h4>
+<p>
+Perfect! With everything we learned so far,
+let's try to prove <strong>Example 1.2.</strong> from the textbook (page 10) :
+If a,b and c are integers, and c = a + b, then a = c − b.
+</p>
+<pre><code class="snippet"><div class="comment">--1.3.1.01 (incomplete)</div>
+example {a b c : ℤ} (h : c = a + b) : a = c - b := by
+  sorry
+</code></pre>
+<p>We have set the problem but haven't started our tactic-style proof yet.
+However, if you click the end of the second line (after "sorry"), 
+you will see, in the current goal state, that there are "no goals" left.
+I am <strong>sorry</strong> to confuse you,
+but this is what the <code class="single_command">sorry</code> tactic does:
+it closes the current goal immediately.
+Just like cheating in video games,
+you didn't prove anything, but you close the goal.
+People use this tactic for temporarily incomplete proof, 
+which they will later delete the <code class="single_command">sorry</code> and finish the proof.
+So...let's delete it. Below is the complete proof. 
+Note that all the steps are exactly the same as the proof in the textbook.
+</p>
+<p>
+Friendly Reminder: you might see a couple of commands that we haven't yet learned about.
+Feel free to Google Lean 4's documentations (or simply move your cursor over the commands in VS code) to see how they work.
+That being said, it might take you a while to understand everything in this proof,
+and you are not required to do so, as we will cover them in the next few chapters.
+</p>
+<pre><code class="snippet"><div class="comment">--1.3.1.01 (complete)</div>
+example {a b c : ℤ} (h : c = a + b) : a = c - b := by
+<span class="comment">  -- Substitution of Equals</span>
+  have h1 : c + (-b) = (a + b) + (-b) := by
+    congr
+<span class="comment">  -- Associativity of Addition </span>
+  have h2 : c + (-b) = a + (b + (-b)) := by
+    rw [add_assoc a b (-b)] at h1
+    exact h1
+<span class="comment">  -- Additive Inverses </span>
+  have h3 : c + (-b) = a + 0 := by
+    rw [add_right_neg b] at h2
+    exact h2
+<span class="comment">  -- Additive Identity </span>
+  have h4 : c + (-b) = a := by
+    rw [add_zero a] at h3
+    exact h3
+<span class="comment">  -- Symmetry of equality </span>
+  have h5 : a = c + (-b) := by
+    symm at h4
+    exact h4
+  exact h5
+</code></pre>
+<dfn><div class="box">Remarks:</div></dfn>
+<p>
+<ol>
+<li><code class="single_command">have hn : t</code>
+adds <code class="single_command">(hn : t)</code> to the assumptions.
+But since this assumption "t" is not part of the original assumptions,
+you need to prove it in order to use it, which is why it follows by <code class="single_command">:= by</code>.
+the block of code indented after it will be used to solve the subgoal "t".
+</li>
+<li>
+If you type <span class="comment">  -- </span> somewhere at a line,
+everything following will be the "comment", 
+which will be ignored by the computer.
+Use <code class="single_command">have</code> and comments
+can make your code much more readable.
+</li>
+<li>
+<code class="single_command">congr</code> is a tactic, not a theorem.
+Whenever you have "a = b" as one assumption and "a + c = b + c" as the goal,
+just type <code class="single_command">congr</code> directly to close the goal.
+(This tactic is actually much more powerful than that, 
+but for now let's just use it for this specific property of integers.)
+</li>
+<li>
+The third to last line of code uses the tactic <code class="single_command">symm</code>,
+which switches two sides of the equation.
+</li>
+</ol>
+</p>
+<p>
+You made it! Congratulations on reading through the first chapter.
+Since now you have a basic idea of how Lean Theorem Prover works,
+we can try something much more interesting in the following chapters :D
+</p>
+
+        </section>
+
+        <section>
+            <h2>Chapter 2: Logic and mathematical language</h2>
+<dfn><div class="box">Review:</div></dfn>
+<p></p>
+<strong><em>statement - </em></strong> a sentence that is either true or false
+<p>
+We can use propositional variables (P, Q, R, ...) to indicate some arbitrary statements, 
+like "P is true", "Q is false", blah blah...
+</p>
+<p>
+When talking about a statement,
+we often want to know all the possibilities of the truth value that statement can have,
+and we can use a <strong>truth table</strong> to list those possibilities:
+</p>
+<table>
+    <tr>
+      <th>P</th>
+    </tr>
+    <tr>
+      <td>True</td>
+    </tr>
+    <tr>
+      <td>False</td>
+    </tr>
+  </table>
+<p>
+Well, the truth value of a statement with one variable can only have two possibilities,
+which is not very interesting.
+However, as Mathematics is the art of exploring <em>relations</em>,
+things get more interesting when we study a statement that consists of more than one variable using <strong>logical connectives</strong>.
+</p>
+            <h3>2.1. Negations (¬)</h3>
+<dfn><div class="box">Review:</div></dfn>
+<p>
+The negation operator negates the truth value of a statement. 
+False becomes true, and true becomes false. Thus:
+</p>
+<table>
+    <tr>
+        <th>P</th>
+        <th>¬P</th>
+    </tr>
+    <tr>
+        <td>True</td>
+        <td>False</td>
+    </tr>
+    <tr>
+        <td>False</td>
+        <td>True</td>
+    </tr>
+</table>
+<p></p>
+<dfn><div class="box">In Lean:</div></dfn>
+<p>In VS Code, type "\not" to get the operator "¬".
+(There are of course other ways for doing so. 
+You can always check the ways to type specific symbols by hovering your cursor over them.)
+</p>
+<p>
+Try to evaluate the following. See the difference?
+</p>
+<pre><code class="snippet"><div class="comment">-- 2.1.01</div>
+#eval 10 > 5
+#eval ¬(10 > 5)
+</code></pre>
+<dfn><div class="box">Remarks:</div></dfn>
+<p>We can actually keep negating the truth value of a statement:</p>
+<table>
+    <tr>
+        <th>P</th>
+        <th>¬P</th>
+        <th>¬¬P</th>
+    </tr>
+    <tr>
+        <td>True</td>
+        <td>False</td>
+        <td>True</td>
+    </tr>
+    <tr>
+        <td>False</td>
+        <td>True</td>
+        <td>False</td>
+    </tr>
+</table>
+<p>
+We can see that the "double negation" restores the original truth value.
+</p>
+            <h3>2.2. And (∧) and Or (∨) / Conjunction and Disjunction</h3>
+<dfn><div class="box">Review:</div></dfn>
+<ul>
+    <li>The statement P <strong>and</strong> Q (P ∧ Q) is true provided P is true and Q is true. Otherwise, P and Q is false.</li>
+    <li>The statement P <strong>or</strong> Q (P ∨ Q) is true provided P is true, Q is true, or both are true. Otherwise, P or Q is false.</li>
+</ul>
+<table>
+    <tr>
+        <th>P</th>
+        <th>Q</th>
+        <th>P ∧ Q</th>
+    </tr>
+    <tr>
+        <td>True</td>
+        <td>True</td>
+        <td>True</td>
+    </tr>
+    <tr>
+        <td>True</td>
+        <td>False</td>
+        <td>False</td>
+    </tr>
+    <tr>
+        <td>False</td>
+        <td>True</td>
+        <td>False</td>
+    </tr>
+    <tr>
+        <td>False</td>
+        <td>False</td>
+        <td>False</td>
+    </tr>
+</table>
+<p></p>
+<table>
+    <tr>
+        <th>P</th>
+        <th>Q</th>
+        <th>P ∨ Q</th>
+    </tr>
+    <tr>
+        <td>True</td>
+        <td>True</td>
+        <td>True</td>
+    </tr>
+    <tr>
+        <td>True</td>
+        <td>False</td>
+        <td>True</td>
+    </tr>
+    <tr>
+        <td>False</td>
+        <td>True</td>
+        <td>True</td>
+    </tr>
+    <tr>
+        <td>False</td>
+        <td>False</td>
+        <td>False</td>
+    </tr>
+</table>
+<p>
+The truth tables for "And" operator and "Or" operator get bigger. 
+Because now we have <em>two</em> variables in a statement,
+we have <em>four</em> possibilities in total, as shown above.
+You can see the pattern here:
+Each time we add a variable to our statement, we double the combinations.
+Therefore, a statement with <strong>n</strong> propositional variables has <strong>2^n</strong> combinations.
+</p>
+<dfn><div class="box">In Lean:</div></dfn>
+<p>
+In VS Code, type "\and" for "∧" and type "\or" for "∨".
+Try evaluating the following statements.
+</p>
+<pre><code class="snippet"><div class="comment">-- 2.2.01</div>
+#eval (1 + 1 = 2) ∧ (2 = 0)
+#eval (1 + 1 = 2) ∨ (2 = 0)
+</code></pre>
+<p>
+The first statement (1 + 1 = 2) is true, and the second statement (2 = 0) is false. 
+This situation corresponds to the second row of the truth table: P is true while Q is false.
+Therefore, (P ∧ Q) is false, and (P ∨ Q) is true, according to the truth tables.
+</p>
+<p>
+OK. We've discussed a lot about the class materials.
+Now let's see how to prove things with these logical connectives in Lean 4.
+</p>
+<Strong><em>First situation: the goal includes "and" </em></Strong>.
+<p>
+Let's take a look at the truth table of (P ∧ Q).
+We can see that the only situation for (P ∧ Q) to be true is that P and Q should both be true.
+</p>
+
+</p>
+Therefore, in order to prove that (P ∧ Q) is true, we need to prove that P is true and Q is true,
+which means we actually have two goals to prove: (P is true) (Q is true).
+In Lean 4, we need to manually <strong>construct</strong> these two goals using the <code class="single_command">constructor</code> tactic. 
+</p>
+<pre><code class="snippet"><div class="comment">-- 2.2.02</div>
+example {P Q : Prop} (hp : P) (hq : Q) : P ∧ Q := by
+  constructor
+    · exact hp
+    · exact hq
+</code></pre>
+<p>
+Here, we define P and Q to be propositional variables by typing <code class="single_command">{P Q : Prop}</code>. 
+And we have two assumptions: 
+<code class="single_command">(hp : P)</code> is the hypothesis that P is true, and 
+<code class="single_command">(hq : Q)</code> is the hypothesis that Q is true.
+Our goal is to prove that <code class="single_command">P ∧ Q</code> is true.
+</p>
+<p>
+We first use the <code class="single_command">constructor</code> tactic to split our goal to two subgoals:
+<code class="single_command">⊢ P</code> and <code class="single_command">⊢ Q</code>.
+If you click the end of this line and look at the Lean Infoview window in your VS Code editor,
+you can see that now we have two goals to solve.
+</p>
+<p>
+For each of the goal, it's <strong>exactly</strong> the same as one of the hypothesis,
+so as usual, we can use the <code class="single_command">exact</code> tactic to solve it.
+Once we close all the goals, we complete our proof.
+</p>
+<p>
+Note that we use a dot <code class="single_command">·</code> for the lines of codes that solves a specific goal.
+It is also a tactic! 
+If you have multiple goals, the <code class="single_command">·</code> tactic will let the proof state only show the main goal you need to prove at that time.
+It can not only help you focus on a specific subgoal at one time, but also make the code more structured.
+Keep in mind that all the lines of code for one goal should be indented for the same amount of spaces (they need to be left-aligned).
+</p>
+<strong><em>Second Situation: the goal includes "or"</em></strong>
+<p>
+Look at the truth table of (P ∨ Q). 
+You can see that it's much easier to prove that (P ∨ Q) is true:
+as long as one of the variable is true, the entire statement is true.
+</p>
+<p>
+In other words, to prove that (P ∨ Q) is true, we can just show that (P is true).
+Similarly, we can just show that (Q is true). Either works.
+</p>
+<pre><code class="snippet"><div class="comment">-- 2.2.03</div>
+example {P Q : Prop} (h : P) : P ∨ Q := by
+  left
+  exact h
+
+</code></pre>
+<pre><code class="snippet"><div class="comment">-- 2.2.04</div>
+example {P Q : Prop} (h : Q) : P ∨ Q := by
+  right
+  exact h
+</code></pre>
+<p>
+The first example shows how we prove (P ∨ Q) by only using the hypothesis that (P is true),
+while the second examples shows how we do that by only using (Q is true).
+If the goal has the "Or" operator "∨",
+we use the <code class="single_command">left</code> tactic to tell Lean that we only want to prove the <strong>left</strong> side of the goal,
+so it reduces the goal from (P ∨ Q) to P.
+Same thing to the <code class="single_command">right</code> tactic,
+which reduces the goal from (P ∨ Q) to Q.
+</p>
+<strong><em>Third situation: the hypothesis includes "and"</em></strong>
+<p>
+Well, if we already know that (P ∧ Q) is true, then we know that P and Q should both be true.
+Therefore, (P ∧ Q) is a very strong condition: we can use it not only to prove that (P is true), but also to prove that (Q is true).
+</p>
+<pre><code class="snippet"><div class="comment">-- 2.2.05</div>
+example {P Q : Prop} (h : P ∧ Q) : P := by
+  cases' h with hp hq
+  exact hp
+</code></pre>
+<p>
+In this example, our hypothesis is <code class="single_command">P ∧ Q</code>,
+and our goal is <code class="single_command">P</code>. 
+To prove it, we need to first split our hypothesis to two new hypotheses,
+and we do so by using the <code class="single_command">cases'</code> command.
+<code class="single_command">cases' h with hp hq</code>
+means to split the hypothesis h to two new hypotheses named hp and hq.
+Lean can figure out by itself what the new hypotheses should be.
+In this case, the original hypothesis is (P ∧ Q), 
+so the new hypotheses should be (P) and (Q).
+</p>
+<p>
+You will see why this tactic is called <code class="single_command">cases'</code> in the next and last situation.
+</p>
+<strong><em>Fourth situation: the hypothesis includes "or"</em></strong>
+<p>
+I should say this is the most important situation you need to know since it turns out to be the key idea of "proof by cases",
+which we will talk about in the next chapter.
+</p>
+<p>Think about this question: if you know that (P ∨ Q) is true, 
+can you make conclusion that (P is true)? 
+Or similarly, can you say that (Q is true)?
+</p>
+<p>
+Boom! You can't :) 
+</p>
+<p>
+If you look at the truth table, you can see that 
+"(P ∨ Q) is true" correspond to three combinations: 
+(P is true, Q is true) (P is true, Q is false) (P is false, Q is true).
+</p>
+<p>
+Therefore, you can't tell whether one of the variables is true by just knowing (P ∨ Q) is true.
+However, there is one thing you can do: you can assume two <strong>cases</strong>.
+One case is that you only know P is true, and the other case is that you only know Q is true.
+If both of them lead to the same conclusion, then you can say that (P ∨ Q) also leads to that conclusion
+because you've considered about all the <strong>cases</strong> the hypothesis (P ∨ Q) can have.
+</p>
+<p>
+I keep emphasizing the word "cases" because you can also use the <code class="single_command">cases'</code> tactic here
+(I think that's probably why it's called <code class="single_command">cases'</code>). 
+When used for the assumption (P ∧ Q), it splits the hypothesis to two new hypotheses,
+and you can use either of them later.
+When used for the assumption (P ∨ Q), however, it makes two new goals:
+although the two goals are the same, the first goal uses the first hypothesis (P) while the second goal uses the second hypothesis (Q).
+You need to prove both of them in order to complete the goal.
+</p>
+<pre><code class="snippet"><div class="comment">-- 2.2.06</div>
+example {P Q : Prop} (h : P ∨ Q) : P ∨ Q := by
+  cases' h with hp hq
+  · left
+    exact hp
+  · right
+    exact hq
+</code></pre>
+<p>
+You might find this example to be kind of silly: we can just use <code class="single_command">exact h</code> to close the goal.
+And...you are right. This example just gives you a sense of how to prove by cases,
+which we will spend a lot of time on in chapter 3. 
+(This example includes the tactics we discussed in the first two situations.
+If you find it hard to understand this example, the first two situations' examples should help)
+</p>
+            <h4>2.2.1. Negation of <em>"and"</em> and <em>"or"</em> statements (De Morgan's laws)</h4>
+<p>
+The textbook gives some intuitive examples and then draws the following conclusion:
+</p> 
+<ul>
+<li>
+    In general, the statement <em>not (P and Q)</em> has the same meaning as the statement <em>(not P) or (not Q)</em>.
+</li>
+<li>
+    In general, the statement <em>not (P or Q)</em> has the same meaning as the statement <em>(not P) and (not Q)</em>.
+</li>
+</ul>
+<p>
+But how to prove these results? Well, let's draw the truth tables:
+</p>
+<table>
+    <tr>
+        <th>P</th>
+        <th>Q</th>
+        <th>¬P</th>
+        <th>¬Q</th>
+        <th>P ∧ Q</th>
+        <th>¬(P ∧ Q)</th>
+        <th>¬P ∨ ¬Q</th>
+    </tr>
+    <tr>
+        <td>True</td>
+        <td>True</td>
+        <td>False</td>
+        <td>False</td>
+        <td>True</td>
+        <td>False</td>
+        <td>False</td>
+    </tr>
+    <tr>
+        <td>True</td>
+        <td>False</td>
+        <td>False</td>
+        <td>True</td>
+        <td>False</td>
+        <td>True</td>
+        <td>True</td>
+    </tr>
+    <tr>
+        <td>False</td>
+        <td>True</td>
+        <td>True</td>
+        <td>False</td>
+        <td>False</td>
+        <td>True</td>
+        <td>True</td>
+    </tr>
+    <tr>
+        <td>False</td>
+        <td>False</td>
+        <td>True</td>
+        <td>True</td>
+        <td>False</td>
+        <td>True</td>
+        <td>True</td>
+    </tr>
+</table>
+<p>
+The table looks kind of messy, but everything we've worked out is just for the last two columns.
+And guess what? They are exactly the same!
+If two statements have the same column in the truth table,
+then they are <strong>logically equivalent</strong> (≡).
+In this case, we can therefore conclude that ¬(P ∧ Q) ≡ ¬P ∨ ¬Q.
+</p>
+<p>We can work out the same process for the other result:</p>
+<table>
+    <tr>
+        <th>P</th>
+        <th>Q</th>
+        <th>¬P</th>
+        <th>¬Q</th>
+        <th>P ∨ Q</th>
+        <th>¬(P ∨ Q)</th>
+        <th>¬P ∧ ¬Q</th>
+    </tr>
+    <tr>
+        <td>True</td>
+        <td>True</td>
+        <td>False</td>
+        <td>False</td>
+        <td>True</td>
+        <td>False</td>
+        <td>False</td>
+    </tr>
+    <tr>
+        <td>True</td>
+        <td>False</td>
+        <td>False</td>
+        <td>True</td>
+        <td>True</td>
+        <td>False</td>
+        <td>False</td>
+    </tr>
+    <tr>
+        <td>False</td>
+        <td>True</td>
+        <td>True</td>
+        <td>False</td>
+        <td>True</td>
+        <td>False</td>
+        <td>False</td>
+    </tr>
+    <tr>
+        <td>False</td>
+        <td>False</td>
+        <td>True</td>
+        <td>True</td>
+        <td>False</td>
+        <td>True</td>
+        <td>True</td>
+    </tr>
+</table>
+<p>The last two columns are also the same.
+Therefore, ¬(P ∨ Q) ≡ ¬P ∧ ¬Q.
+</p>
+<dfn><div class="box">Remarks: </div></dfn>
+<ol>
+    <li>
+        These two results are also called "De Morgan's laws".
+        They can be very useful when you set the conditions for "if-else" statements in some programming languages.
+    </li>
+    <li>We can use the truth table to prove some other simple logical equivalence.
+        For example, in the <strong>"2.1. Negations"</strong> section,
+        we can see that "P" and "¬¬P"s' columns in the truth table are the same.
+        We can therefore conclude that (P ≡ ¬¬P).
+    </li>
+    <li>
+        Of course, this is not the only way to express the "logical equivalence".
+        We will discover another way of expressing that in the "if and only if" section. 
+    </li>
+</ol>
+            <h3>2.3 If, then</h3>
+<p>
+Here it is, our protagonist in this chapter!
+Remember the proofs we did before?
+Usually, a statement we try to prove consists of hypotheses and a goal.
+The hypotheses follow <strong>"if"</strong>, and the goal follows <strong>"then"</strong>.
+If "P" is the hypothesis, and "Q" is the conclusion, we denote "if P, then Q" by (P → Q).
+Here's the truth table:
+<table>
+    <tr>
+        <th>P</th>
+        <th>Q</th>
+        <th>P → Q</th>
+    </tr>
+    <tr>
+        <td>True</td>
+        <td>True</td>
+        <td>True</td>
+    </tr>
+    <tr>
+        <td>True</td>
+        <td>False</td>
+        <td>False</td>
+    </tr>
+    <tr>
+        <td>False</td>
+        <td>True</td>
+        <td>True</td>
+    </tr>
+    <tr>
+        <td>False</td>
+        <td>False</td>
+        <td>True</td>
+    </tr>
+</table>
+</p>
+<p>
+    You might find the last two rows, where 
+    "if the hypothesis is false, then the statement must be true, regardless of the conclusion"
+    to be confusing. Well, that's just how people define it.
+    For example, consider this statement: If a dinosaur ate all the cherry trees on Quad yesterday,
+    then all the books in Suzzallo Library become sandwiches at lunch time every day.
+    In reality, it sounds ridiculous. But to mathematicians, it's a true statement, because the hypothesis is false: there's no dinosaur on Quad yesterday!
+    Try evaluate the following statement:
+</p>
+<pre><code class="snippet"><div class="comment">-- 2.3.01</div>
+#eval 10 < 5 → 3 = 4
+</code></pre>
+<p>It's true, right? Btw you can type "\r" in VS Code for "→".</p>
+<p>
+But these vacuous truths can be quite boring.
+For most of the time, we want to prove (P → Q) to be true by assuming "P is true".
+Why it works? Well, if we can assume that P is true, and show that Q must be true when P is true,
+then the second row of the truth table for (P → Q) can never be reached.
+Since we know that if P is false, then (P → Q) must be true,
+we've' considered through all the situations where (P → Q) is true.
+Thus, the following two examples are actually proving the same thing:
+</p>
+<pre><code class="snippet"><div class="comment">-- 2.3.02 (a)</div>
+example {x : ℝ} (h : x = 2) : x^2 = 4 := by
+  rw [h]
+  norm_num
+</code></pre>
+<pre><code class="snippet"><div class="comment">-- 2.3.02 (b)</div>
+example {x : ℝ} : x = 2 → x^2 = 4 := by
+  intro h
+  rw [h]
+  norm_num
+</code></pre>
+<p>
+However, if you look at the second example, you can see that we added an extra step at the beginning.
+Since the first step to prove a statement (P → Q) is to assume P to be true,
+we need to <strong>introduce</strong> the hypothesis that "P is true",
+which is what the <code class="single_command">intro</code> tactic does.
+<code class="single_command">intro h</code> just means to introduce an assumption named "h" from the hypothesis of the statement.
+With this tactic, we change the goal from <code class="single_command">(P → Q)</code>
+to a new hypothesis <code class="single_command">h : P</code> and a new goal <code class="single_command">Q</code>.
+</p>
+<dfn><div class="box">Bonus 1: </div></dfn>
+<p>
+If you look at the truth table, you can actually get another result:
+If P is true and (P → Q) is true, then we can say that Q must be true!
+This is a neat perspective, and this result is known as <strong>"modus ponens"</strong>.
+In other word, if we already know that P is true and (P → Q) is true, we can prove that Q is true.
+(e.g. if we know that a function is differentiable, 
+and we know that a differentiable function must be continuous,
+we can conclude the this function is also continuous!)
+We can <strong>apply</strong> the conditional statement in the assumptions by using the <code class="single_command">apply</code> tactic:
+</p>
+<pre><code class="snippet"><div class="comment">-- 2.3.03</div>
+example {P Q : Prop} (h1 : P) (h2 : P → Q) : Q := by
+  apply h2
+  exact h1
+</code></pre>
+<p>
+Here, a hypothesis is <code class="single_command">h2 : P → Q</code>,
+and the goal is <code class="single_command">Q</code>,
+so <code class="single_command">apply h2</code> changes the goal from <code class="single_command">Q</code> to <code class="single_command">P</code>.
+Then the goal is exactly the same as <code class="single_command">h1</code>. 
+You can think of the functionality of <code class="single_command">apply</code> as to rewrite a goal 
+from a conclusion back to a hypothesis based on a conditional statement you know to be true.
+This is a big advantage of Lean: you can do the proofs backward!
+</p>
+<dfn><div class="box">Bonus 2: </div></dfn>
+<p>
+We usually want to prove that something is true based on the assumptions.
+However, sometimes mathematicians want to prove something to be false! (the second row of the truth table).
+This leads to the key idea of <em>proof by contradiction</em>, which we will cover in the next chapter.
+</p>
+            <h4>Negation of (P → Q)</h4>
+<p>In the textbook, we know that ¬(P → Q) ≡ P ∧ ¬Q. Let's use the truth table to prove that.</p>
+<table>
+    <tr>
+        <th>P</th>
+        <th>Q</th>
+        <th>P → Q</th>
+        <th>¬P ∨ Q</th>
+        <th>¬(P → Q)</th>
+        <th>P ∧ ¬Q</th>
+    </tr>
+        <td>True</td>
+        <td>True</td>
+        <td>True</td>
+        <td>True</td>
+        <td>False</td>
+        <td>False</td>
+    </tr>
+    </tr>
+        <td>True</td>
+        <td>False</td>
+        <td>False</td>
+        <td>False</td>
+        <td>True</td>
+        <td>True</td>
+    </tr>
+    </tr>
+        <td>False</td>
+        <td>True</td>
+        <td>True</td>
+        <td>True</td>
+        <td>False</td>
+        <td>False</td>
+    </tr>
+    </tr>
+        <td>False</td>
+        <td>False</td>
+        <td>True</td>
+        <td>True</td>
+        <td>False</td>
+        <td>False</td>
+    </tr>
+</table>
+<p>
+Based on the truth table, we can see that the third and fourth columns are the same,
+so P → Q ≡ ¬P ∨ Q. The fifth and sixth columns are the same, so ¬(P → Q) ≡ P ∧ ¬Q.
+Actually, you can also use De Morgan's laws and double negation to show that 
+¬(P → Q) ≡ ¬(¬P ∨ Q) ≡ ¬¬P ∧ ¬Q ≡ P ∧ ¬Q.
+If you don't like drawing the truth tables, you can also use some logical properties you know to prove the logical equivalences. 
+</p>
+            <h4>2.3.1. Converse and Contrapositive</h4>
+<dfn><div class="box">Review: </div></dfn>
+<p><strong><em>Definition 2.1.</em></strong> The converse of P → Q is the statement Q → P. The contrapositive of P  → Q is the
+    statement (not Q) → (not P).</p>
+    <table>
+        <tr>
+            <th>P</th>
+            <th>Q</th>
+            <th>¬P</th>
+            <th>¬Q</th>
+            <th>P → Q</th>
+            <th>Q → P</th>
+            <th>¬Q → ¬P</th>
+        </tr>
+        <tr>
+            <td>True</td>
+            <td>True</td>
+            <td>False</td>
+            <td>False</td>
+            <td>True</td>
+            <td>True</td>
+            <td>True</td>
+        </tr>
+        <tr>
+            <td>True</td>
+            <td>False</td>
+            <td>False</td>
+            <td>True</td>
+            <td>False</td>
+            <td>True</td>
+            <td>False</td>
+        </tr>
+        <tr>
+            <td>False</td>
+            <td>True</td>
+            <td>True</td>
+            <td>False</td>
+            <td>True</td>
+            <td>False</td>
+            <td>True</td>
+        </tr>
+        <tr>
+            <td>False</td>
+            <td>False</td>
+            <td>True</td>
+            <td>True</td>
+            <td>True</td>
+            <td>True</td>
+            <td>True</td>
+        </tr>
+    </table>
+<p>
+Look at the last three columns, you can see that P → Q <strong>is not equivalent</strong> to its <em>converse</em> Q → P.
+However, P → Q <strong>is equivalent</strong> to its <em>contrapositive</em> ¬Q → ¬P.
+</p>
+<p>
+This is an extremely useful fact! 
+It means that proving P → Q is the same as proving ¬Q → ¬P since these two statements are logically equivalent.
+Sometimes it's hard to prove P → Q, but it's easy to prove ¬Q → ¬P, 
+so we can change out goal from P → Q to ¬Q → ¬P, 
+which turns out to be a common proof technique: <em>proof by contrapositive</em>.
+We will talk more about that in the next chapter.
+</p>
+<dfn><div class="box">In Lean: </div></dfn>
+<p>
+    If you want to change your goal to its contrapositive, 
+    just shout at your computer :"<strong>contrapose!</strong>"
+    If nothing happens, you will then need to explicitly type the <code class="single_command">contrapose!</code> tactic.
+</p>
+<pre><code class="snippet"><div class="comment">-- 2.3.1.01</div>
+example {P Q : Prop} (h : P → Q) : ¬Q → ¬P := by
+  contrapose!
+  exact h
+</code></pre>
+
+            <h4>2.3.2. if and only if</h4>
+<p><strong><em>Definition 2.2.</em></strong> The statement P <strong>if and only if</strong> Q, written P ↔ Q, is equivalent to the statement
+    (P → Q) and (Q → P).</p>
+<p>As usual, let's draw the truth table. (Hopefully this is the last truth table in this chapter...)</p>
+<table>
+    <tr>
+        <th>P</th>
+        <th>Q</th>
+        <th>P → Q</th>
+        <th>Q → P</th>
+        <th>(P → Q) ∧ (Q → P) [a.k.a. P ↔ Q]</th>
+    </tr>
+    <tr>
+        <td>True</td>
+        <td>True</td>
+        <td>True</td>
+        <td>True</td>
+        <td>True</td>
+    </tr>
+    <tr>
+        <td>True</td>
+        <td>False</td>
+        <td>False</td>
+        <td>True</td>
+        <td>False</td>
+    </tr>
+    <tr>
+        <td>False</td>
+        <td>True</td>
+        <td>True</td>
+        <td>False</td>
+        <td>False</td>
+    </tr>
+    <tr>
+        <td>False</td>
+        <td>False</td>
+        <td>True</td>
+        <td>True</td>
+        <td>True</td>
+    </tr>
+</table>
+<p>
+You can see that in order for P ↔ Q to be true, 
+P and Q should have the same truth value (they should be both true or both false),
+which means that P and Q should be <strong>logically equivalent</strong>.
+This gives us another way of defining logical equivalence: 
+<strong>P ≡ Q if P ↔ Q</strong>.
+</p>
+<p>
+Also, since P ↔ Q is defined by (P → Q) ∧ (Q → P).
+If we want to prove the statement P ↔ Q,
+we should prove two things: (P → Q), and (Q → P).
+Do you still rememer how we prove something with "∧" operator?
+Yes, the <code class="single_command">constructor</code> tactic!
+</p>
+<dfn><div class="box">In Lean: </div></dfn>
+<pre><code class="snippet"><div class="comment">-- 2.3.1.01</div>
+example {P Q : Prop} (h1 :  P → Q) (h2 : Q → P) : P ↔ Q := by
+  constructor
+    · exact h1
+    · exact h2
+</code></pre>
+<p>
+In VS Code, type "\iff" for "↔". 
+"iff" means "if and only if".
+</p>
+            <h3>2.4. Quantifiers</h3>
+<p>One last thing before we end this chapter.</p>
+<dfn><div class="box">Review: </div></dfn>
+<ul>
+    <li><strong><em>Universal Quantifier </em>(∀) - </strong></li> ∀x, P(x) ↔ For all x, P(x) is true.
+    <li><strong><em>Existential Quantifier </em>(∃) - </strong></li> ∃x, P(x) ↔ There exists at least one x such that P(x) is true.
+</ul>
+<p>(In VS Code, type "\all" for "∀" and "\ex" for "∃".)</p>
+<p>
+Sometimes, we make a statement with the variable restricted in a certain <strong>set</strong> (which is also called <strong>domain of discourse</strong>).
+For example, the statement "Every apple in the world is red" has the domain of discourse "all the apples in the world".
+We can denote this statement as "∀ apple in the world, it's red."
+Similarly, if we want to say that "At least one apple in the world is red", 
+we can write "∃ an apple in the world such that it's red."
+</p>
+<p>
+When I was learning the concepts of quantifiers,
+I tried to relate them with the concepts I learned before,
+and here's how I think about them:
+<p>∀x, P(x)
+means that every element x in the domain of discourse should satisfy P(x).
+Suppose the domain of discourse is the set {a, b, c, b....}.
+To make sure that ∀x, P(x), we need to have P(a) ∧ P(b) ∧ P(c) ∧ P(d) ∧...
+Remember the truth table of conjunction (∧)? 
+The only case where the conjunction of multiple statements is true is when all the statements are true,
+which is exactly what the universal quantifier is used for.
+</p>
+<p>
+Similarly, if you remember the truth table of disjunction (∨),
+you should know that the only case where disjunction is false is that all the statements are false.
+If <strong>at least one</strong> statement is true, the entire statement is true.
+This is exactly how existential quantifier is defined! 
+Suppose our domain of discourse is {a, b, c, d...} and our statement is: ∃x, P(x).
+We only need to have P(a) ∨ P(b) ∨ P(c) ∨ P(d) ∨...
+Even if only one element satisfies the statement, we can say that "∃x, P(x)" is true.
+</p>
+<p>
+Now you see that we can always make analogies like these when talking about quantifiers.
+Therefore, there are also four situations to consider:
+</p>
+<dfn><div class="box">In Lean: </div></dfn>
+<p><strong><em>First situation: the goal includes </em>∃.</strong></p>
+<p>Some mathematical concepts are defined using quantifiers.
+We've seen in chapter 1 that the definitions of "divisibility" and "parity" both include existential quantifiers 
+(e.g. The integer x is even if <em>there exists</em> an integer k such that x = k + k).
+Did you remember how to prove the goal with "there exists" or "for some"? The <code class="single_command">use</code> tactic :D
+</p>
+<pre><code class="snippet"><div class="comment">-- 2.4.01 (a)</div>
+example : ∃ n : ℝ, |n| > 0 := by
+  use 1
+  norm_num
+
+</code></pre>
+<pre><code class="snippet"><div class="comment">-- 2.4.01 (b)</div>
+example : ∃ n : ℝ, |n| > 0 := by
+  use -1
+  norm_num
+</code></pre>
+<p>
+This is an example from the textbook: There exists n such that |n| > 0.
+To prove the goal with "there exists", we only need to <strong>use</strong> one specific example that satisfies the statement by using the <code class="single_command">use</code> tactic.
+Since there are innumerous numbers that satisfies the statement, (in this case, all the real numbers, except 0, satisfies the statement),
+we can choose any non-zero real number we want. 
+In the examples above, 1 works, and -1 also works.
+The <code class="single_command">use</code> tactic replaces the variable with the example we give.
+Since we reduce the goal to a numerical expression, we can use <code class="single_command">norm_num</code> to close the goal.
+</p>
+<p><strong><em>Second situation: the goal includes </em>∀.</strong></p>
+<p>
+If the goal includes ∀, we need to show that every element in the domain of discourse satisfies the statement,
+which is a very tedious thing to do.
+If the domain of discourse is the entire set of real numbers, then...
+well, we must find another way.
+</p>
+<p>
+Luckily, we have a trick: to prove that "∀x, P(x)", 
+we can assume an arbitrary element x from the domain of discourse.
+Note that x must be <strong>an arbitrary element x</strong>, 
+meaning that we can not have any other assumptions about this element.
+Then this x can be used to represent any element in the domain of discourse.
+If we prove that P(x) for this arbitrary element is true, 
+we can therefore show that P(x) for every element is true.
+To <strong>introduce</strong> this arbitrary element,
+we need our old friend: <code class="single_command">intro</code> tactic.
+</p>
+<pre><code class="snippet"><div class="comment">-- 2.4.02</div>
+example : ∀ n : ℝ, |n| ≥ 0 := by
+  intro n
+  norm_num
+</code></pre>
+<p>
+This is also an example from the textbook.
+To prove that "∀ n : ℝ, |n| ≥ 0", 
+we first introduce an arbitrary real number n by typing <code class="single_command">intro n</code>.
+After that, we have a new variable n, and our goal becomes "⊢ |n| ≥ 0".
+Well, think about the definition of absolute value we learned in the first chapter,
+it's easy to figure out that the absolute value of a real number is always greater than or equal to 0.
+This is an axiom about real number, and surprise! <code class="single_command">norm_num</code> also works here.
+(But don't abuse <code class="single_command">norm_num</code>! It typically doesn't work with variables.
+We got lucky here because our goal is an axiom of real number.)
+</p>
+<p><strong><em>Third situation: the hypothesis includes </em>∃.</strong></p>
+<p>
+Consider this statement: If n is an even number, then n + 1 is an odd number.
+This is a true statement, but how to prove that?
+Well, let's unfold the definitions of even and odd number,
+and we can rewrite the statement as the following equivalent statement:
+If n = 2 * k₁ for some integer k₁, then n + 1 = 2 * k₂ + 1 for some integer k₂.
+Now it's easy to prove: just let k₂ = k₁.
+<p>
+More specifically, the hypothesis is "∃ k, n = 2 * k",
+so we know that there must be an integer k that satisfies n = 2 * k.
+Even if we don't know the value of k here,
+we can construct a variable k and a condition that n = 2 * k,
+which means that we can <strong>obtain</strong> two pieces of information from this hypothesis:
+a variable k, and a new hypothesis that "n = 2 * k". 
+We can do so by using the <code class="single_command">obtain</code> tactic.
+</p>
+<pre><code class="snippet"><div class="comment">-- 2.4.03</div>
+example {n : ℤ} (h : Even n) : Odd (n + 1) := by
+  obtain ⟨k, newh⟩ := h
+  use k
+  rw [newh]
+  ring  
+</code></pre>
+<p>
+The syntax here might take a while to get used to. 
+Since the hypothesis <code class="single_command">(h : Even n)</code> is definitionally equivalent to <code class="single_command">(h : ∃ k : ℤ, n = 2 * k)</code>,
+<code class="single_command">obtain ⟨k, newh⟩ := h</code>
+means to <strong>obtain</strong> a new variable <code class="single_command">k : ℤ</code> 
+and a new hypothesis <code class="single_command">(newh : n = k + k)</code> from the hypothesis <code class="single_command">h</code>.
+</p>
+<p>
+Now we have the variable k, what should we do next?
+Since the goal <code class="single_command">Odd (n + 1)</code> is definitionally equivalent to <code class="single_command">∃ k : ℤ, n + 1 = 2 * k + 1</code>,
+and we know how to prove the goal with "there exists"! 
+We can use the variable <code class="single_command">k</code> we obtained to rewrite the goal as 
+<code class="single_command">n + 1 = 2 * k + 1</code>.
+</p>
+<p>
+We are close to our goal! 
+We have the hypothesis that <code class="single_command">(newh : n = k + k)</code>,
+so we can rewrite <code class="single_command">n</code> in the goal as  <code class="single_command">k + k</code>.
+By using <code class="single_command">rw [newh]</code>, 
+the goal becomes <code class="single_command">k + k + 1 = 2 * k + 1</code>.
+</p>
+<p>
+Yeah! Our goal is reduced to high school algebra.
+However, <code class="single_command">norm_num</code> will not work here because this expression includes variable,
+and we have discussed that <code class="single_command">norm_num</code> doesn't deal with variables well.
+So...it's time to let you know one of the most powerful tactic in Lean 4: <code class="single_command">ring</code>. 
+In this course, whenever your goal only involves some algebra of variables 
+(i.e. an equality of expressions that only contains addition, multiplication, and exponents),
+you can use <code class="single_command">ring</code> tactic to close the goal.
+</p>
+<p><strong><em>Fourth situation: the hypothesis includes </em>∀.</strong></p>
+<p>
+Actually, we've seen this situation already.
+Consider our last example: If n is even, then n + 1 is odd.
+We actually have a hidden assumption here: n must be an integer.
+Therefore, the complete statement should be: For any integer n, if n is even, then n + 1 is odd.
+We often omit the universal quantifier in a conditional statement, since it's easy to infer it from the statement.
+And in Lean, we often have this hidden universal quantifier already when we declare the variables
+(e.g. {n : ℤ} is the same as ∀ n : ℤ).
+Thus, we don't really need to worry about this situation.
+</p>
+            <h4>2.4.1. Negations of quantified statements</h4>
+<dfn><div class="box">Review: </div></dfn>
+<ul>
+    <li>¬(∀x, P(x)) ≡ ∃x, ¬P(x)</li>
+    <li>¬(∃x, P(x)) ≡ ∀x, ¬P(x)</li>
+</ul>
+<p>
+How to negate the statement that "every apple in the world is red"?
+If you can find at least one apple that is not red, 
+it's sufficient to say that the original statement is false,
+and its negation that "at least an apple in the world is not red" is true.
+You can also find some other examples to understand the second property.
+Finding examples from real life is always a great way to study logic :)
+</p>
+<p>Now we have accomplished all the prerequisites!
+Let's use the things we've learned so far to write some real and useful mathematical proofs :D</p>
+
+        </section>
+
+        <section>
+            <h2>Chapter 3: Writing Proofs</h2>
+            <p>This is the content of Chapter 3.</p>
+        </section>
+
+        <section>
+            <h2>Chapter 4: Proofs Involving Quantifiers</h2>
+            <p>This is the content of Chapter 4.</p>
+        </section>
+
+        <section>
+            <h2>Chapter 5: Sets</h2>
+            <p>This is the content of Chapter 5.</p>
+        </section>
+    </main>
+
+    <footer>
+
+    </footer>
+
+</body>
+</html>
