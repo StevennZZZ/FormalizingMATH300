@@ -7,7 +7,12 @@ variable (a b : ℤ)
 
 -- 3.1 (a) If a and b are both odd, then a + b is even.
 example (h : Odd a ∧ Odd b) : Even (a + b) := by
-  sorry
+  cases' h with ha hb
+  cases' ha with k₁ hc
+  cases' hb with k₂ hd
+  use k₁ + k₂ + 1
+  rw [hc, hd]
+  ring
 
 -- 3.1 (b) If a is even and b is odd, then a + b is odd.
 example (h : Even a ∧ Odd b) : Odd (a + b) := by
