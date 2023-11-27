@@ -1,4 +1,4 @@
-import Mathlib.Data.Int.Basic
+import Mathlib.Data.Real.Basic
 
 section -- 1.1
 -- 1.1 (a): If a and b are integers and a + b = a,

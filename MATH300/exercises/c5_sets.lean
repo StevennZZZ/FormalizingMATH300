@@ -1,6 +1,5 @@
 import Mathlib.Data.Set.Basic
-import Mathlib.Data.Int.Basic
-import Mathlib.Tactic
+import Mathlib.Data.Real.Basic
 
 section -- 5.1 Prove that, for any sets A and B:
 variable {α : Type*}

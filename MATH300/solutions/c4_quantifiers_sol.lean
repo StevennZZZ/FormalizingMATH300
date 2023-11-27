@@ -1,5 +1,4 @@
-import Mathlib.Data.Int.Basic
-import Mathlib.Algebra.Parity
+import Mathlib.Data.Real.Basic
 
 -- 4.1  for all integers m and n,
 --      4 |(m² + n²) if and only if m and n are even.
