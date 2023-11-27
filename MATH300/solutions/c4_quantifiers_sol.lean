@@ -16,7 +16,8 @@ example {a b c : ℤ} (h : c ≠ 0) :
 --     2m + 3n = 12.
 --     Are these integers unique? (Justify your answer.)
 example {m n : ℤ} : ∃ m n, 2 * m + 3 * n = 12 := by
-  sorry
+  use 3, 2
+  -- These integers are unique, since 3 isn't equal to 2
 
 -- 4.4 Prove that there is no negative integer n
 --     such that n² + n < 0.
