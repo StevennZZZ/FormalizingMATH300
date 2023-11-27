@@ -16,7 +16,12 @@ example (h : Odd a ∧ Odd b) : Even (a + b) := by
 
 -- 3.1 (b) If a is even and b is odd, then a + b is odd.
 example (h : Even a ∧ Odd b) : Odd (a + b) := by
-  sorry
+  cases' h with ha hb
+  cases' ha with k₁ hc
+  cases' hb with k₂ hd
+  use k₁ + k₂
+  rw [hc, hd]
+  ring
 
 -- 3.1 (c) If a + b is odd,
 --         then a and b must have opposite parity.
