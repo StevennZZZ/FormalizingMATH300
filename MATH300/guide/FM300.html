@@ -1618,22 +1618,24 @@ More specifically, the hypothesis is "∃ k, n = 2 * k",
 so we know that there must be an integer k that satisfies n = 2 * k.
 Even if we don't know the value of k here,
 we can construct a variable k and a condition that n = 2 * k,
-which means that we can <strong>obtain</strong> two pieces of information from this hypothesis:
-a variable k, and a new hypothesis that "n = 2 * k". 
-We can do so by using the <code class="single_command">obtain</code> tactic.
+And here is the good news: you know what tactic we need to use.
+We've discussed that we can relate existential quantifiers with disjunction (∨).
+Which tactic is used for the situation where the hypothesis includes disjunction?
+The <code class="single_command">cases'</code> tactic!
+Whenever we want to seperate something from the hypothesis, we can just <code class="single_command">cases'</code> the hypothesis <code class="single_command">with</code> the things we want.
+It's such a useful tactic!
 </p>
 <pre><code class="snippet"><div class="comment">-- 2.4.03</div>
 example {n : ℤ} (h : Even n) : Odd (n + 1) := by
-  obtain ⟨k, newh⟩ := h
+  cases' h with k newh 
   use k
   rw [newh]
   ring  
 </code></pre>
 <p>
-The syntax here might take a while to get used to. 
 Since the hypothesis <code class="single_command">(h : Even n)</code> is definitionally equivalent to <code class="single_command">(h : ∃ k : ℤ, n = 2 * k)</code>,
-<code class="single_command">obtain ⟨k, newh⟩ := h</code>
-means to <strong>obtain</strong> a new variable <code class="single_command">k : ℤ</code> 
+<code class="single_command">cases' h with k newh </code>
+means to pull out a new variable <code class="single_command">k : ℤ</code> 
 and a new hypothesis <code class="single_command">(newh : n = k + k)</code> from the hypothesis <code class="single_command">h</code>.
 </p>
 <p>

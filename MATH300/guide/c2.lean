@@ -100,7 +100,7 @@ example : ∀ n : ℝ, |n| ≥ 0 := by
 
 -- 2.4.03
 example {n : ℤ} (h : Even n) : Odd (n + 1) := by
-  obtain ⟨k, newh⟩ := h
+  cases' h with k newh
   use k
   rw [newh]
   ring
