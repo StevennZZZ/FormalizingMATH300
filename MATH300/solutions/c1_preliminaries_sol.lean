@@ -17,7 +17,10 @@ example (a b c d : ℤ) : (a + b) + (c + d) =
 --          and c ≠ 0, then a = b.
 example (a b c : ℤ) (h₁ : a * c = b * c) (h₂ : c ≠ 0) :
                     a = b := by
-  sorry
+  rw [mul_eq_mul_right_iff] at h₁
+  cases' h₁ with ha hb
+  rw [ha]
+  contradiction
 
 -- 1.1 (d) : Binomial Expansion: If a and b are integers,
 --           then (a + b)² = (a² + 2ab) + b²
