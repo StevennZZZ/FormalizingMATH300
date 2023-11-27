@@ -8,11 +8,11 @@ variable (A B : Set α)
 
 -- 5.1 (a) A ∩ B ⊆ A
 example : A ∩ B ⊆ A := by
-  sorry
+  exact Set.inter_subset_left A B
 
 -- 5.1 (b) A ⊆ A ∪ B
 example : A ⊆ A ∪ B := by
-  sorry
+  exact Set.subset_union_left A B
 
 end -- 5.1
 
