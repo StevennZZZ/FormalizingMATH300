@@ -14,6 +14,18 @@ example {n : ℝ} (h1 : n = 1) : n + 1 = 2 := by
   norm_num
 
 
+--1.1.03
+example {a b : ℤ} (h1 : a = 2) (h2 : b = 5) : a + b = 7 := by
+  rw [h1, h2]
+  norm_num
+
+
+--1.1.04
+example {n : ℝ} (h1 : 1 = n) : n + 1 = 2 := by
+  rw [← h1]
+  norm_num
+
+
 --1.2.01
 example : |-7| = 7 := by
   norm_num

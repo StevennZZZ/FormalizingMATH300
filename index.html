@@ -124,9 +124,17 @@ You might get frustrated very often during this learning process,
 but remember, this is also the biggest advantage of Lean: 
 we can be sure that
 the mathematical proofs we construct are absolutely correct.
+</p>
+<p>
 And as you get used to it, Lean can not only verify the proofs you wrote,
-but also assist you during the process of writing proofs! (which we will cover later)
-You will never regret learning this new skill :)
+but also assist you to construct your own proofs! 
+In this guide, we will first walk you through how the proofs in the textbook are exactly implemented in Lean,
+which means that we will simply turn the "paper version" of a proof to its "Lean code version".
+However, as we are familiar enough with Lean,
+I will show you how Lean Prover can do something that's impossible to do on paper.
+For example, a statement that requires a <strong>page-long</strong> proof which takes you <strong>hours</strong> just for finding the supporting theorems
+can be achieved by a <strong>single command</strong> in Lean!!
+I'm sure you will never regret learning this skill in your academic and career life :)
 </p>
 <p>Get ready? Then let's start!</p>
             <h3>1.1. Elementary properties of the integers</h3>
@@ -273,6 +281,42 @@ In this case, the goal is "1 + 1 = 2",
 so <code class="snippet">norm_num</code> closes the goal immediately.
 Now we have no goals left in the current proof state.
 We completed our proof!
+</p>
+            <h4>A few more examples:</h4>
+<pre><code class="snippet"><div class="comment">--1.1.03</div>
+example {a b : ℤ} (h1 : a = 2) (h2 : b = 5) : a + b = 7 := by
+  rw [h1, h2]
+  norm_num
+</code></pre>
+<p>
+Don't look at the next part! Try to figure out what statement it's trying to prove by yourself!
+You can do it :)
+</p>
+<p>
+Now I assume that you can understand this example. Well, our hypotheses are "a = 2" and "b = 5", and our goal is "a + b = 7".
+The way to prove it is basically the same as in the last example: 
+we use <code class="single_command">rw</code> to replace the variables with their corresponding numbers based on the hypotheses,
+and use <code class="single_command">norm_num</code> to do the algebra with only numbers.
+In this case, we need to rewrite two variables. 
+You can use <code class="single_command">rw</code> commands twice,
+but you can also put the hypotheses you use for rewriting in the same command and seperate them with commas,
+as what we did in this example: <code class="single_command">rw [h1, h2]</code>.
+</p>
+<p>
+One more example before we move on.
+</p>
+<pre><code class="snippet"><div class="comment">--1.1.04</div>
+example {n : ℝ} (h1 : 1 = n) : n + 1 = 2 := by
+  rw [← h1]
+  norm_num  
+</code></pre>
+<p>
+It's the same as the first example, except that the hypothesis is "1 = n" instead of "n = 1".
+If we want to <strong>rewrite</strong> the n in our goal as 1,
+we need to tell the <code class="single_command">rw</code> command explicitly that 
+we want to replace n with 1 instead of replacing 1 with n (which it does by default). 
+Therefore, we need to put a "←" before the hypothesis: <code class="single_command">rw [← h1]</code>.
+Type "\l" in VS Code to get "←".
 </p>
 <dfn><div class="box">Remarks:</div></dfn>
 <ol>
@@ -590,10 +634,14 @@ with <code class="single_command">(h : a * b = 1)</code> <br>
 <p>Well, as you are provided with this table in your homework and exams,
 you are also not required to memorize every command:
 just refer back to it whenever needed.
+And in fact, we will probably use this table of commands <strong>only for this chapter</strong>!
+In the next few chapters, we will let you know some other useful Lean tactics that can handle these properties <strong>all at once</strong>.
+At that time, you will see how powerful the Lean Theorem Prover is for assisting your proving.
+But for now let's use the commands from this table just for practice.
 </p>
 <p>
-And here comes the second question:
-OK, so now I know all these commands, but how to use them? For example:
+And now you may have a new question:
+OK, so now I know all the commands of these theorems, but how to use them? For example:
 If you are asked to prove that a + b = b + a, where a and b are integers.
 How do you prove it?
 </p>
@@ -1656,10 +1704,12 @@ the goal becomes <code class="single_command">k + k + 1 = 2 * k + 1</code>.
 Yeah! Our goal is reduced to high school algebra.
 However, <code class="single_command">norm_num</code> will not work here because this expression includes variable,
 and we have discussed that <code class="single_command">norm_num</code> doesn't deal with variables well.
-So...it's time to let you know one of the most powerful tactic in Lean 4: <code class="single_command">ring</code>. 
+If you do this on paper, you need to cite the properties of integers from the EPIs table.
+But we are proving things on Lean, so...it's time to let you know one of the most powerful tactic in Lean 4: <code class="single_command">ring</code>. 
 In this course, whenever your goal only involves some algebra of variables 
 (i.e. an equality of expressions that only contains addition, multiplication, and exponents),
 you can use <code class="single_command">ring</code> tactic to close the goal.
+It can apply the properties of integers (associativity, commutativity, distribution law, etc.) all at once!
 </p>
 <p><strong><em>Fourth situation: the hypothesis includes </em>∀.</strong></p>
 <p>
@@ -1693,7 +1743,318 @@ Let's use the things we've learned so far to write some real and useful mathemat
 
         <section>
             <h2>Chapter 3: Writing Proofs</h2>
-            <p>This is the content of Chapter 3.</p>
+<p>
+Finally! We are going to write some proofs.
+In the following two chapters, we will use the tactics we learned from the first two chapters to write the <em>lean code version</em> of the proofs from the textbook.
+Another way of saying that is to <strong>formalize the theorems from the textbook</strong>,
+which sounds pretty cool!
+</p>
+<h4>Calculational Proofs</h4>
+<p>
+Before we dive into those different proof techniques, 
+let's first take a look at the kind of proofs we've dealt with over the past 10 years: calculational proofs.
+Maybe we can get some inspirations from that.
+</p>
+<dfn><div class="box">In Lean: </div></dfn>
+<pre><code class="snippet"><div class="comment">-- 3.0.01 (complicated way) Prove that (x + y) * (x + y) = x * x + (x * y + y * x) + y * y</div>
+example {x y : ℝ} : (x + y) * (x + y) = x * x + (x * y + y * x) + y * y := by
+  calc
+    _ = (x + y) * x + (x + y) * y := by exact mul_add (x + y) x y  <span class="comment">-- 5. The Distributive Law</span>
+    _ = x * (x + y) + y * (x + y):= by rw [mul_comm (x + y) x, mul_comm (x + y) y]  <span class="comment">-- 3. Commutativity</span>
+    _ = x * x + x * y + (y * x + y * y) := by rw [mul_add x x y, mul_add y x y]  <span class="comment">-- 5. The Distributive Law</span>
+    _ = x * x + (x * y + (y * x + y * y)) := by rw [add_assoc (x * x) (x * y) (y * x + y * y)]  <span class="comment">-- 4. Associativity</span>
+    _ = x * x + ((x * y + y * x) + y * y) := by rw [← add_assoc (x * y) (y * x) (y * y)]  <span class="comment">-- 4. Associativity</span>
+    _ = x * x + (x * y + y * x) + y * y := by rw [← add_assoc (x * x) (x * y + y * x) (y * y)]  <span class="comment">-- 4. Associativity</span>
+</code></pre>
+<p>
+If you want to prove an equality,
+you can use the <code class="single_command">calc</code> keyword, 
+and then follow this structure to do the calculation step by step.
+Note that for each step you need to show the tactics you use to make such progress (after <code class="single_command">:= by</code>).
+These commands can be found in first chapter's EPIs table.
+</p>
+<p>
+Well, it looks really complicated, right? Here is a simple version:
+</p>
+<pre><code class="snippet"><div class="comment">-- 3.0.01 (simple way) Prove that (x + y) * (x + y) = x * x + (x * y + y * x) + y * y</div>
+example {x y : ℝ} : (x + y) * (x + y) = x * x + (x * y + y * x) + y * y := by
+  ring
+</code></pre>
+<p>
+Yes, just type <code class="single_command">ring</code>, and the goal will be closed.
+It applies all the basic properties of integers we use in the <code class="single_command">calc</code> version implicitly.
+You don't need to do the algebra by yourself anymore.
+</p>
+<p>
+So why did I show you the complicated way?
+Well, first of all, <code class="single_command">calc</code> is just a command you'd better know as a Lean user.
+And most importantly, the calculational proof shows that in order to prove something,
+it is common to make progress <strong>step by step</strong>,
+which therefore leads to the discussion about "direct proofs".
+</p>
+            <h3>3.1. Direct Proofs</h3>
+<dfn><div class="box">Review: </div></dfn>
+<p>
+    <strong>Theorem 3.1.</strong> If a and b are even integers, then a + b is even.
+</p>
+<p>
+The textbook gives a clear proof of this theorem.
+Let's see how we code a "Lean version" of this proof.
+</p>
+<dfn><div class="box">In Lean: </div></dfn>
+<div class="unfinished">theorem 3.1. proof. Intro to "theorem" and "unfold" keyword. May give two versions (one with unfold)</div>
+<p>
+<dfn><div class="box">Review: </div></dfn>
+<p>
+    <strong>Theorem 3.2.</strong> Suppose a, b, and c are integers. If a|b and b|c, then a|c.
+</p>
+<dfn><div class="box">In Lean: </div></dfn>
+<div class="unfinished">theorem 3.2. proof. </div>
+            <h4>3.1.1. Structure your proof in Lean</h4>
+<p>Let's continue our discussion about the "step-by-step" proof from the beginning of this chapter. 
+The two examples above are relatively simple and don't require much reasoning.
+Oftentimes, however, a proof consists of many <em>intermediate steps</em>.
+We all want lives to be easy, 
+so if our goal is (P → Q),
+we always want to check if there exists a theorem that is exactly the same as our goal,
+and then use our lovely <code class="single_command">exact</code> tactic to close the goal directly.
+Unfortunately, for most of the time we need to show an entire logic chain in order to prove something.
+For example, to prove that (P → Q), we need to show that (P → R → S → T → U → V → W → ... → Q). 
+If you find this to be frustrating, then ...... welcome to Mathematics.</p>
+<p>
+Let's take a simple example to see why this "logic chain" works.
+</p>
+<pre><code class="snippet"><div class="comment">-- 3.1.01 If P → R, and R → Q, then P → Q.</div>
+example {P Q R : Prop} (h1 : P → R) (h2 : R → Q) : P → Q := by
+  intro h
+  apply h2
+  apply h1
+  exact h
+</code></pre>
+<p>
+Using the tactics we learned before, we proved that "If P → R, and R → Q, then P → Q."
+In fact, as you follow this pattern, you can have as many intermediate propositions as you want.
+As long as the logic chain begins with P and ends with Q, you can always show that (P → Q).
+Therefore, we've proved that "a chain of implications" does work. 
+And most importantly, we are now able to use Lean to prove something that's not proved in the textbook! That's amazing!!
+</p>
+<p>
+Let's see a real example of it. Consider this statement: If a and b are even integers, then 2 | a + b.
+De ja vu? It's actually equivelent to <strong>theorem 3.1.</strong> - "if a and b are even, then a + b is even."
+(a + b is even ≡ ∃ k, a + b = 2k ≡ 2 | a + b). 
+In fact, 2 divides any even integer! 
+Therefore, we can first use the result from <strong>theorem 3.1.</strong>
+to show that if a and b are both even, then a + b is even, and then unfold the definition of even number and divisibility of prove that 2 | a + b, which means:
+in order to prove (Even a ∧ Even b → 2 | a + b), we can add an intermediate step:
+(Even a ∧ Even b → Even (a + b) → 2 | a + b).
+</p>
+<p>
+So how can we construct the intermediate steps of a proof in Lean?
+For most of the time, we want to prove (P → Q), 
+but we don't have the hypotheses like (h1 : P → R) and (h2 : R → Q)
+that are explicitly written in the problem, so we need to <strong>have</strong> our own hypotheses as the intermediate steps by using the
+<code class="single_command">have</code> tactic.
+</p>
+<dfn><div class="box">In Lean: </div></dfn>
+<pre><code class="snippet"><div class="comment">-- 3.1.04 If a and b are even integers, then 2 ∣ a + b</div>
+example {a b : ℤ} (h1 : Even a) (h2 : Even b) : 2 ∣ a + b := by
+  have h3 : Even (a + b) := by
+    exact c3_1 h1 h2
+  cases' h3 with k h4
+  use k
+  rw [h4]
+  ring
+</code></pre>
+<p>
+Remember: our first step is to prove that a + b is an even integer.
+To add this intermediate step, we use the <code class="single_command">have</code> tactic, 
+and give this step a name. 
+Since it will become the third hypothesis of this statement, we name it <code class="single_command">h3</code> here.
+After the colon we state the content of this step: <code class="single_command">Even (a + b)</code>.
+Finally, we type <code class="single_command">:= by</code> to indicate that we are going to prove it.
+As you hit "enter" + "tab", you will see that in the "current proof state" in your Lean Infoview window,
+the goal becomes the statement we are proving in this step.
+This is a <em>subgoal</em> of our whole proof. 
+We use indentation to indicate that we are proving a subgoal, 
+and Lean's current proof state will only show the subgoal to help us focus on it.
+In this case,
+since the subgoal is already proved in this Lean file, we can use the theorem directly by the <code class="single_command">exact</code> tactic.
+We named this theorem "c3_1" above, which takes two hypotheses 
+<code class="single_command">(h1 : Even a) (h2 : Even b)</code>
+and outputs the result <code class="single_command">Even (a + b)</code>.
+(If you have some programming experience, 
+you can think of a theorem as a function.
+The hypotheses before the colon are the input arguments it needs to receive,
+and the goal after the colon is the output it gives.
+Your proof of the theorem followed by <code class="single_command">:= by</code> is the implementation of the function).
+In this case, "c3_1" needs to take two arguments that are the hypotheses to show that a and b are even,
+so we type <code class="single_command">c3_1 h1 h2</code>,
+and it will return the output (<code class="single_command">Even (a + b)</code>).
+Since it's exactly the same as this subgoal, we use <code class="single_command">exact</code> tactic.
+After we complete the proof of a subgoal, we exit this indentation block, 
+and Lean will show us the main goal again.
+Then you can use this new hypothesis and some tactics to close this main goal as usual.
+</p>
+            <h3>3.2. Proof by Cases (a.k.a. proof by exhaustion)</h3>
+<p>
+From last chapter, 
+we've shown that in order to prove things like ((P ∨ Q) → R),
+we need to prove that (P → R) ∧ (Q → R).
+You can draw a truth table to show that these two statements are actually logically equivalent,
+but we have three variables here, so our truth table has 2^3 = 8 rows,
+and it becomes very tedious to draw a truth table for it.
+Let's see if we can apply some properties of logic to prove this equivelance.
+</p>
+<dfn><div class="box">Review: </div></dfn>
+<ul>
+    <li>Law of Implication: P → Q ≡ ¬P ∨ Q</li>
+    <li>De Morgan's Laws (1): ¬(P ∧ Q) ≡  ¬P ∨ ¬Q</li> 
+    <li>De Morgan's Laws (2): ¬(P ∨ Q) ≡  ¬P ∧ ¬Q</li>
+    <li>Distributive Laws (1): P ∧ (Q ∨ R) ≡ (P ∧ Q) ∨ (P ∧ R) </li>
+    <li>Distributive Laws (2): P ∨ (Q ∧ R) ≡ (P ∨ Q) ∧ (P ∨ R) </li>
+</ul>
+<p>
+We've seen the first three properties from the last chapter.
+You might be unfamiliar with the last two properties, 
+but it's not difficult to memorize them: they are very similar to the distrubutive law in arithmetic.
+</p>
+<p>
+Applying these properties, we have:</p>
+<p>
+(P ∨ Q) → R ≡ ¬(P ∨ Q) ∨ R ≡ (¬P ∧ ¬Q) ∨ R ≡ (¬P ∨ R) ∧ (¬Q ∨ R) ≡ (P → R) ∧ (Q → R).
+</p>
+<p>
+We've proved the underlying logic of <em>proof by cases</em>!
+</p>
+<dfn><div class="box">In Lean: </div></dfn>
+<div class="unfinished">theorem 3.3, 3.4, 3.5 proof. </div>
+            <h3>3.3. Proof by contrapositive</h3>
+<p>
+Recall that P → Q ≡ ¬Q → ¬P. To change a goal from P → Q to ¬Q → ¬P in a Lean proof,
+use the <code class="single_command">contrapose!</code> tactic.
+</p>
+<dfn><div class="box">In Lean: </div></dfn>
+<div class="unfinished">theorem 3.6, 3.7 proof. </div>
+            <h3>3.4. Proof by contradiction</h3>
+<p>
+That's it! This is my favorite form of proof :) Let's see why and how it works.
+</p>
+<p>
+Let's first introduce two new terms: tautology and contradiciton.
+A tautology is always true, while a contradiction is always false.
+For example:
+</p>
+<table>
+<tr>
+    <th>P</th>
+    <th>¬P</th>
+    <th>P ∨ ¬P</th>
+</tr>
+<tr>
+    <td>True</td>
+    <td>False</td>
+    <td>True</td>
+</tr>
+<tr>
+    <td>False</td>
+    <td>True</td>
+    <td>True</td>
+</tr>
+</table>
+<p>
+We can see that (P ∨ ¬P) is true in all cases, so (P ∨ ¬P) is a tautology.
+</p>
+<table>
+    <tr>
+        <th>P</th>
+        <th>¬P</th>
+        <th>P ∧ ¬P</th>
+    </tr>
+    <tr>
+        <td>True</td>
+        <td>False</td>
+        <td>False</td>
+    </tr>
+    <tr>
+        <td>False</td>
+        <td>True</td>
+        <td>False</td>
+    </tr>
+</table>
+<p>
+We can see that (P ∧ ¬P) is false in all cases, so (P ∧ ¬P) is a contradiction.
+(These two results are also called "Negation Laws".)
+</p>
+<p>
+Now let's see the definition of <em>proof by contradiction</em> from the textbook:
+In a proof by contradiction, we use the fact that a statement and its negation have opposite truth values.
+To prove that P is true, suppose instead that not(P) is true and apply logic, definitions, and previous
+results to arrive at a conclusion you know to be false. Then you may conclude that not(P) must be
+FALSE and thus P must be TRUE.
+</p>
+<p>
+In short: To prove P, we need to show that (¬P → C), where C stands for contradiction.
+Let's draw a truth table:
+</p>
+<table>
+    <tr>
+        <th>P</th>
+        <th>C</th>
+        <th>¬P → C</th>
+    </tr>
+    <tr>
+        <td>True</td>
+        <td>False</td>
+        <td>True</td>
+    </tr>
+    <tr>
+        <td>False</td>
+        <td>False</td>
+        <td>False</td>
+    </tr>
+</table>
+<p>
+P and (¬P → C) are logically equivalent, which shows why proof by contradiction works.
+</p>
+<dfn><div class="box">In Lean: </div></dfn>
+<p>
+If we want to prove by contradiction in Lean 4,
+we need two steps:
+first step is to negate the goal and make it as a new hypothesis (assume the negation of our goal);
+second step is to change our goal to "false", which is how Lean denotes contradiction.
+Luckily, there is a tactic called <code class="single_command">by_contra</code>
+that can complete these two steps at once. 
+</p>
+<pre><code class="snippet"><div class="comment">-- 3.4.01 If P is true, then P is true</div>
+example {P : Prop} (h : P) : P := by
+  by_contra h1
+  contradiction
+</code></pre>
+<p>
+We can just use <code class="single_command">exact h</code> to close the goal,
+but for a demo of proof by contradiction in Lean, let's use <code class="single_command">by_contra h1</code> here,
+which creates a new hypothesis <code class="single_command">h1 : ¬P</code>, (which is the negation of the original goal  <code class="single_command">⊢ P</code>), 
+and changes the goal to <code class="single_command">⊢ False</code>.
+</p>
+<p>
+OK, so now we have two hypotheses: <code class="single_command">h : P</code> and <code class="single_command">h1 : ¬P</code>. 
+The <strong>contradiction</strong> is so obvious!
+Whenever we see a <strong>contradiction</strong> in our hypotheses,
+we can use <code class="single_command">contradiction</code> tactic to close the goal immediately.
+</p>
+<p>
+Remark: <code class="single_command">contradiction</code> can close any goal with contradictory hypotheses.
+Remember that if the hypothesis is false, the the statement is vacuously true, right?
+</p>
+<div class="unfinished">theorem 3.8, 3.9, 3.10 proof. </div>
+            <h3>3.5. Proof of an if-and-only-if Statement</h3>
+<p>
+    Suppose we want to prove (P ↔ Q) in Lean, and we know that (P ↔ Q) is the same as (P → Q) ∧ (Q → P),
+    so our goal is actually a conjunction. Therefore, we need to use the <code class="single_command">constructor</code> tactic to split our goal to (P → Q) and (Q → P).
+    (you can review chapter 2 if you don't remember this)
+</p>
+
+<div class="unfinished">theorem 3.11 proof. </div>
         </section>
 
         <section>
