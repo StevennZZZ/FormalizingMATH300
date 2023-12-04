@@ -2046,7 +2046,7 @@ we can use <code class="single_command">contradiction</code> tactic to close the
 Remark: <code class="single_command">contradiction</code> can close any goal with contradictory hypotheses.
 Remember that if the hypothesis is false, the the statement is vacuously true, right?
 </p>
-<div class="unfinished">theorem 3.8, 3.9, 3.10 proof. </div>
+<div class="unfinished">theorem 3.8, 3.9, 3.10 proof. might use intro</div>
             <h3>3.5. Proof of an if-and-only-if Statement</h3>
 <p>
     Suppose we want to prove (P ↔ Q) in Lean, and we know that (P ↔ Q) is the same as (P → Q) ∧ (Q → P),
@@ -2059,12 +2059,117 @@ Remember that if the hypothesis is false, the the statement is vacuously true, r
 
         <section>
             <h2>Chapter 4: Proofs Involving Quantifiers</h2>
-            <p>This is the content of Chapter 4.</p>
+            <h3>4.1. Proofs of <em>for all</em> statements</h3> 
+<dfn><div class="box">Review: </div></dfn>
+<p>
+    Remember that in chapter 2,
+    we showed that the universal quantifier (∀) and the hypothesis of the conditional statement (if...then...) are quite similar.
+    Here is an example from the textbook:
+</p>
+<p>The statement "<em>for all integers x, P(x)</em>"
+is equivalent to the statement "<em>if x is an integer, then P(x).</em>"
+</p>   
+<p>
+Therefore, we can use the same method to prove a statement with "for all..." and a statement with "if..."
+by <strong>introducing</strong> an arbitrary variable and reduce our goal to the remaining part of the statements.
+Does it ring a bell? Yes! The <code class="single_command">intro</code> tactic! 
+Whenever you see something like (∀ x..., P(x)) or (if x ..., then P(x)), 
+use <code class="single_command">intro x</code> to add x as 
+a variable to your assumption and reduce your goal to <code class="single_command">P(x)</code>.
+This tactic is sooooooooo useful!
+</p>
+<div class="unfinished">theorem 4.1 proof</div>
+            <h3>4.2. Proofs of <em>there exist</em> statements</h3> 
+<dfn><div class="box">Review: </div></dfn>
+<p>
+Since "there exists" is much weaker than "for all", when we prove a statement with <em>"there exists an x such that P(x)"</em> (∃x, P(x)),
+we only need to <strong>use</strong> one example of x that satisfies P(x). 
+In Lean 4, this can be simply done by the <code class="single_command">use</code> tactic.
+If we are able to <strong>construct</strong> specific examples to prove the statement, then we are using "<strong>constructive proof</strong>".
+Let's implement some examples from textbook in Lean:
+</p>
+<dfn><div class="box">In Lean: </div></dfn>
+<pre><code class="snippet"><div class="comment">-- 4.2.01 There exist integers m and n such that 10m + 13n = 3.</div>
+example : ∃ m n : ℤ, 10 * m + 13 * n = 3 := by
+  use -1, 1
+  norm_num
+</code></pre>
+<p>
+To prove that "there exist integers m and n such that 10m + 13n = 3",
+we can just give speficic examples of "m" and "n" that satisfy the equation.
+In this case, <code class="single_command">use -1, 1</code> means that 
+we use "-1" for "m" and "1" for "n". 
+Then the goal is reduced to an expression with numbers, and we can use 
+<code class="single_command">norm_num</code> to close the goal.
+</p>
+<pre><code class="snippet"><div class="comment">-- 4.2.02 For every integer a, there exists an integer b such that a + b = 1.</div>
+example : ∀ a : ℤ, ∃ b : ℤ, a + b = 1 := by
+  intro a
+  use 1 - a
+  ring
+</code></pre>
+<p>
+If you see some quantifiers being used together, don't panic, 
+as you will get used to that in your real analysis class...
+Just use the techniques we learned to reduce to goal in sequence.
+<strong>It's important to follow the sequence of quantifiers!
+("∀ a : ℤ, ∃ b : ℤ" and "∃ b : ℤ, ∀ a : ℤ" are not the same thing!)
+</strong>
+In this case, we see <code class="single_command">∀ a : ℤ</code> first,
+so we intro the arbitrary variable  <code class="single_command">a</code>.
+Then we construct a specific example <code class="single_command">1 - a</code>
+and use it to replace b in the goal. Then the goal is reduced to an algebraic expression with variable,
+and we can use <code class="single_command">ring</code> to close the goal.
+</p>
+            <h3>4.3. Existence and uniqueness</h3> 
+<p>
+To prove "existence" (∃), we only need to give one example. 
+There might be other examples that also satisfy the same proposition,
+but one example is enough.
+</p>
+<p>
+To prove "uniqueness" (∃!), however, we not only need to give an example,
+but also need to show that that's the only example that can satisfy the proposition.
+In other words, besides the basic steps of proving existence,
+we need one more step:
+we assume that there exist another example that also satisfies the same proposition.
+But after some deduction, we find that the two examples are actually the same.
+</p>
+<p>
+I know it sounds a little bit abstract. 
+Let's follow the textbook and see how to prove uniqueness in Lean.
+</p>
+<dfn><div class="box">In Lean: </div></dfn>
+<div class="unfinished">theorem 4.2, 4.3 proof, intro to dsimp</div>
         </section>
 
         <section>
             <h2>Chapter 5: Sets</h2>
             <p>This is the content of Chapter 5.</p>
+        </section>
+        <section>
+            <h2>Chapter 6: Proofs by Induction</h2>
+            <p>This is the content of Chapter 6.</p>
+        </section>
+        <section>
+            <h2>Chapter 7: Relations</h2>
+            <p>This is the content of Chapter 7.</p>
+        </section>
+        <section>
+            <h2>Chapter 8: Congruences</h2>
+            <p>This is the content of Chapter 8.</p>
+        </section>
+        <section>
+            <h2>Chapter 9: Functions</h2>
+            <p>This is the content of Chapter 9.</p>
+        </section>
+        <section>
+            <h2>Chapter 10: Cardinality</h2>
+            <p>This is the content of Chapter 11.</p>
+        </section>
+        <section>
+            <h2>(Optional) Chapter 11: Dependent Type Theory</h2>
+            <p>This is the content of Chapter 11.</p>
         </section>
     </main>
 
