@@ -7,7 +7,10 @@ variable (A B : Set α)
 
 -- 5.1 (a) A ∩ B ⊆ A
 example : A ∩ B ⊆ A := by
-  exact Set.inter_subset_left A B
+  intro x
+  intro h
+  cases' h with hl hr
+  exact hl
 
 -- 5.1 (b) A ⊆ A ∪ B
 example : A ⊆ A ∪ B := by

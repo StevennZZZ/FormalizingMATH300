@@ -51,6 +51,10 @@
             color:rgb(179, 0, 255);
         }
 
+        .sorry {
+            color:crimson
+        }
+
         .comment {
             color:darkgreen;
         }
@@ -97,7 +101,7 @@ to install Lean 4 and VS Code editor on your computer.
 </p>
 <p class="unfinished">(clone the repository...complete this later)</p>
 <p>Now we are all set. Open the file named "c1.lean" in VS Code.
-Now take a look at the contents of this file. 
+Take a look at the contents of this file. 
 Suddenly, you are able to figure out everything in this file!</p> ...... well, that's not true.
 You might be wondering: what the heck do all these lines of codes mean??
 Don't worry, in this chapter, we will go through every line of code in this file,
@@ -148,7 +152,7 @@ I'm sure you will never regret learning this skill in your academic and career l
         ℕ (natural numbers), ℤ (integers), ℚ (rational numbers), ℝ (real numbers)</li>
 </ul>
 <dfn><div class="box">In Lean:</div></dfn>
-<p>In VS Code, it's easy to <strong>evaluate</strong> the truth value of a simple mathematical statement 
+<p>Open the file for this chapter (c1.lean). In VS Code, it's easy to <strong>evaluate</strong> the truth value of a simple mathematical statement 
 by using the <code class="single_command">#eval</code> command. 
 Move you cursor over the <code class="single_command">#eval</code> command,
 and in the pop-up window, you can see how Lean evaluates this statement.
@@ -302,9 +306,7 @@ You can use <code class="single_command">rw</code> commands twice,
 but you can also put the hypotheses you use for rewriting in the same command and seperate them with commas,
 as what we did in this example: <code class="single_command">rw [h1, h2]</code>.
 </p>
-<p>
-One more example before we move on.
-</p>
+    <p>One more example before we move on:</p>
 <pre><code class="snippet"><div class="comment">--1.1.04</div>
 example {n : ℝ} (h1 : 1 = n) : n + 1 = 2 := by
   rw [← h1]
@@ -335,6 +337,11 @@ We will not focus on that too much,
 but it's definitely a good idea to structure you codes in a clean way.
 As in this example, you see that we indent a block of codes that solves a specific goal,
 and we use only one tactic for each line.
+</li>
+<li>
+You might have noticed that the assumptions can be enclosed by either parentheses () or curly braces {}.
+There is a subtle difference between these two, which we will talk about in chapter 3.
+For now, we don't need to worry about the difference.
 </li>
 <li>
 I just realize that the subtitle of this section is "Elementary properties of the integers",
@@ -432,7 +439,7 @@ which is what the tactic <code class="single_command">use</code> does.
 The biggest takeaway here is that we can use the <code class="single_command">use</code> tactic 
 to prove anything with a definition that includes phrases like "there exists" or "for some",
 since we <strong>use</strong> a specific number to show that there really <strong>exists</strong> a number that satisfies the definition.
-You might get confused about what I actually mean here. Don't worry!
+You might get confused about what I actually mean by it here. Don't worry!
 It's a concept from the next chapter: quantifier.
 We will talk more about it later.
 </p>
@@ -453,7 +460,7 @@ Clearly, k = 10, so we <code class="single_command">use 10</code>.
 <p>Now it's time to go back to the table on page 9 of the textbook: Elementary Properties of the Integers (EPIs).</p>
 <p>
 As we have imported a lot of theorems from Mathlib, 
-let's see which Lean 4 command each theorem corresponds to:
+let's see which Lean 4 command each theorem corresponds to (you don't need to understand everything for now):
 </p>
 <p>
 Suppose a, b, c, and d are integers.
@@ -619,7 +626,9 @@ with <code class="single_command">(h : a ≤ b)</code>
 <!--24-->
 <li>
 0 ≤ a^2, where a^2 = a · a. <br>
-In Lean: <code class="single_command">sq_nonneg a</code>
+In Lean: <br>
+<code class="single_command">sq_nonneg a</code> for (0 ≤ a^2)<br>
+<code class="single_command">sr a</code> for (a^2 = a * a)
 </li>
 <!--25-->
 <li>
@@ -718,7 +727,7 @@ If a,b and c are integers, and c = a + b, then a = c − b.
 </p>
 <pre><code class="snippet"><div class="comment">--1.3.1.01 (incomplete)</div>
 example {a b c : ℤ} (h : c = a + b) : a = c - b := by
-  sorry
+  <span class="sorry">sorry</span>
 </code></pre>
 <p>We have set the problem but haven't started our tactic-style proof yet.
 However, if you click the end of the second line (after "sorry"), 
@@ -827,7 +836,7 @@ and we can use a <strong>truth table</strong> to list those possibilities:
 <p>
 Well, the truth value of a statement with one variable can only have two possibilities,
 which is not very interesting.
-However, as Mathematics is the art of exploring <em>relations</em>,
+However, as Mathematics is the art of <em>relations</em>,
 things get more interesting when we study a statement that consists of more than one variable using <strong>logical connectives</strong>.
 </p>
             <h3>2.1. Negations (¬)</h3>
@@ -2145,7 +2154,341 @@ Let's follow the textbook and see how to prove uniqueness in Lean.
 
         <section>
             <h2>Chapter 5: Sets</h2>
-            <p>This is the content of Chapter 5.</p>
+<p>
+Welcome to the chapter of set theory!
+</p>
+<dfn><div class="box">Review: </div></dfn>
+<p>
+<ul>
+<li><strong><em>set: </em></strong>a collection of elements</li>
+<li><strong><em>empty set (∅): </em></strong>a set with no elements (type "\empty" for "∅")</li>
+</ul>
+</p>
+<dfn><div class="box">In Lean: </div></dfn>
+<p>In textbook we can see that there are many ways of specifying a set.
+</p>
+<p>
+In mathematics, if we want to describe a set with certain elements,
+we can list them explicitly (e.g. {1, 2, 3}). 
+In this chapter, however, we'd like to prove more general features of sets
+instead of taking specific examples.
+Also, it's a little bit complicated to implement the reasoning of this kind of sets in Lean 4,
+so we will not focus on it.
+</p>
+<p> Another common way is to use the <strong>set-builder</strong> notation.
+As an example from the textbook, if we want to describe a set with all integers between 5 and 103,
+we write {x ∈ ℤ : 5 ≤ x ≤ 103}. This notation consists of two parts:
+a variable, and a statement specifying the properties of the set.
+In Lean 4, we can describe the same set in this way:
+</p>
+<pre><code class="snippet"><div class="comment">-- 5.0.01</div>
+#check {x : ℤ | x ≥ 5 ∧ x ≤ 103}
+</code></pre>
+<p>If you move your cursor over <code class="single_command">#check</code>,
+you can see that it Lean describes this set as "Set ℤ", which means that 
+it's a set of integers. <code class="single_command">#check</code>
+command can show the <strong>type</strong> of a certain expression.
+</p>
+<p>Wait, what is a <strong>type</strong>?</p>
+            <h3>5.0. Type</h3>
+<p>
+If you have some programming experience,
+you might notice that in a programming language (e.g. Java), different variables can have different kinds of data types
+(integer, float, character, boolean, etc.).
+If you don't, no worries! You just need to know that in programming,
+a term is usually associated with a type. (e.g. "6" has the type "integer", "hello" has the type "string").
+The study of such type systems is called <strong>type theory</strong>,
+which is what Lean, as a programming language, is based on.</p>
+<p>
+In Lean, everything has a type, and we can use the <code class="single_command">#check</code> command to check its type.
+</p>
+<pre><code class="snippet"><div class="comment">-- 5.0.02</div>
+#check 1
+#check 1.5
+#check (1 : ℝ)
+</code></pre>
+<p>
+In Lean 4, the notation we use to show that "a has type b" is "a : b". 
+You can see that "1" has the type "ℕ" (1 : ℕ), meaning that 1 is an natural number.
+Note that ℕ is a type which means "natural number" in Lean 4, instead of "natural number set".
+This is the <strong>key difference </strong>between set theory and type theory!
+It's why we denote it as "1 : ℕ" instead of "1 ∈ ℕ" in Lean.
+</p>
+<p>
+<code class="single_command">#check 1.5</code> gives us "1.5 : Float",
+so 1.5 has the type "Float". Seems like the numbers have default types in Lean.
+But what if we don't want the default type of a specific number?
+For example, we want 1 to be treated as a real number instead of an natural number.
+Well, it's easy: just explicitly type <code class="single_command">(1 : ℝ)</code>,
+and Lean will treat 1 as a real number <em>in that expression</em>.
+</p>
+<p>
+If we want to declare some variables and assign them specific types,
+we just need to follow the same format:
+</p>
+<pre><code class="snippet"><div class="comment">-- 5.0.03</div>
+variable (a b : ℤ)
+variable (P : Prop)
+</code></pre>
+<p>
+Here, we declare variables "a" and "b" with type "integer".
+We also declare a variable "P" with type "Prop", meaning that it's a propositional variable.
+Seems familiar? That's right! For every example we've done before,
+we always declare the variables with their types in this way.
+If we declare variables inside an example, then the variables can only be seen and used in that example.
+But if we declare a variable as the way above, then they can be seen until the end of the file!
+Different ways of declaring variables lead to different <strong>scopes</strong> of variables.
+If you want to restrict the scope of some variables in a certain part of the file,
+use the <code class="single_command">section</code> and <code class="single_command">end</code> keywords,
+so that the variables declared between these two keywords will also have scope only in this part.
+You might've already seen these a lot in the exercise files.
+</p>
+<pre><code class="snippet"><div class="comment">-- 5.0.04</div>
+section
+variable (a b : ℤ)
+variable (P : Prop)
+end
+</code></pre>
+<p>
+What about some types (like ℕ and ℝ) themselves? Are they also variables of certain types?
+</p>
+<pre><code class="snippet"><div class="comment">-- 5.0.05</div>
+#check ℕ
+#check ℝ
+</code></pre>
+<p>
+The answer is "yes". ℕ and ℝ have the type "Type"...
+I will not go deeper than this.
+If you are confused, just remember: a type itself can also have a type.
+</p>
+<p>
+Alright, I almost forget that this is a chapter of sets.
+In Lean, if we want to declare a variable as a set,
+we need to specifically show that it's a set of a certain type.
+For example, "Set ℤ" means that it's a set of "integer" type.
+In this chapter, we will prove some general things about sets,
+so we declare a new variable with the type "Type" and then declare another variable to be the set of that type.
+</p>
+<pre><code class="snippet"><div class="comment">-- 5.0.06</div>
+section
+variable (α : Type)
+variable (A : Set α)
+end
+</code></pre>
+<p>
+In this case, we declare a new type "α", and declare the variable A to be the set of type "α".
+For most of the exercises of set theory, we will follow this format,
+so you will get used to that very soon. 
+</p>
+<p>
+Now guess what? We've gone through the most difficult part in this chapter!
+The following content will just be a review of basic set theory stuff from your textbook
+with their implementations in Lean 4,
+and you already know all the tactics we will be using!
+Before that, let's take a break :)
+</p>
+            <h3>5.1. Union</h3>
+<p>
+For this chapter, I will first declare some variables of sets for all the examples
+of this chapter. These variables will be implicitly available to all the problems in this chapter,
+so that I don't need to write the same things over and over again for each example.
+</p>
+<pre><code class="snippet"><span class="comment">-- Declare variables of sets for all the problems in this chapter</span>
+variable {α : Type} {A B C D : Set α}
+</code></pre>
+<dfn><div class="box">Review: </div></dfn>
+<ul>
+<li>x ∈ A ∪ B ↔ x ∈ A ∨ x ∈ B ("\union" for "∪")</li>
+<li>A ∪ B = B ∪ A</li>
+<li>A ∪ A = A</li>
+</ul>
+            <h3>5.2. Intersection</h3>
+<dfn><div class="box">Review: </div></dfn>
+<ul>
+<li>x ∈ A ∩ B ↔ x ∈ A ∧ x ∈ B ("\inter" for "∩")</li>
+<li>A ∩ B = B ∩ A</li>
+<li>A ∩ A = A</li>
+<li>A and B are disjoint ↔ A ∩ B = ∅</li>
+</ul>
+            <h3>5.3. Subsets</h3>
+<dfn><div class="box">Review: </div></dfn>
+<ul>
+<li>A ⊆ B ↔ ∀ x, x ∈ A → x ∈ B</li>
+<li>∅ is a subset of all sets, including itself.</li>
+<li><strong>Theorem 5.1.</strong> Let A, B, C and D be sets. Suppose A ⊆ B and C ⊆ D. Then A ∪ C ⊆ B ∪ D.</li>
+</ul>
+<dfn><div class="box">In Lean: </div></dfn>
+<p>
+Let's prove the second and third statements in Lean.
+A key thing to remember: <em>always think of the logical expressions of the concepts' definitions.</em>
+</p>
+<pre><code class="snippet"><div class="comment">-- 5.3.01</div>
+example : ∅ ⊆ A := by
+  intro x
+  intro h
+  contradiction
+</code></pre>
+<p>
+Let A be an arbitrary set, and we proved that the empty set is a subset of A.
+The proof is short, but it might not be that intuitive in the first place.
+So think about the definition of our goal: what does "∅ ⊆ A" mean?
+it's equivalent to "∀ x, x ∈ ∅ → x ∈ A", right?
+We know how to prove a statement like that!
+It starts with "∀", so we use <code class="single_command">intro x</code> command to introduce an arbitrary variable x.
+Now the goal reduces to "x ∈ ∅ → x ∈ A". It's a conditional statement,
+so we still use the <code class="single_command">intro</code> tactic to introduce a new hypothesis <code class="single_command">(h : x ∈ ∅)</code>.
+The goal is then reduced to only "x ∈ A". 
+But since the hypothesis h is always false, as an empty set cannot have any element,
+we can use <code class="single_command">contradiction</code> to close the goal. Not difficult, right?
+As long as you can think of the set theoretic notations as logical expressions.
+</p>
+<pre><code class="snippet"><span class="comment">-- 5.3.02 (Theorem 5.1.) Let A, B, C and D be sets. </span>
+<span class="comment">-- Suppose A ⊆ B and C ⊆ D. Then A ∪ C ⊆ B ∪ D.</span>
+example (h1 : A ⊆ B) (h2 : C ⊆ D) : A ∪ C ⊆ B ∪ D := by
+  intro x
+  intro h3
+  cases' h3 with h3 h4
+  · have h5 : x ∈ B := by
+      exact h1 h3
+    left
+    exact h5
+  · have h6 : x ∈ D := by
+      exact h2 h4
+    right
+    exact h6
+</code></pre>
+<p>
+This example is slightly longer, but trust me: you can understand everything in this proof 
+(review chapter 2 if you forgot some of the tactics). Here are some hints :)
+</p>
+<ul>
+<li>A ∪ C ⊆ B ∪ D ↔ ∀ x, x ∈ A ∪ C → x ∈ B ∪ D</li>
+<li>A ⊆ B ↔ ∀ x, x ∈ A → x ∈ B</li>
+<li>C ⊆ D ↔ ∀ x, x ∈ C → x ∈ D</li>
+<li>if a hypothesis is of this form: <code class="single_command">(h1 : P → Q)</code>,
+and another hypothesis is of this form: <code class="single_command">(h2 : P)</code>,
+then <code class="single_command">h1 h2</code> outputs <code class="single_command">Q</code>.
+You can think of a conditional statement as a function that takes the proof of the hypothesis as an input and outputs the conclusion.
+In this case, <code class="single_command">(h1 : P → Q)</code> is a function that takes <code class="single_command">(h2 : P)</code> as an input and outputs <code class="single_command">Q</code>.
+</ul>
+            <h3>5.4. Set equality</h3>
+<dfn><div class="box">Review: </div></dfn>
+<ul>
+<li>A = B ↔ A ⊆ B ∧ B ⊆ A.</li>
+</ul>
+<dfn><div class="box">In Lean: </div></dfn>
+<p>
+Set equality is essentially a conjunction, so we can use <code class="single_command">constructor</code> command to seperate the main goal to subgoals.
+However, Lean 4 doesn't handle "A = B ↔ A ⊆ B ∧ B ⊆ A" implicitly, 
+so we need to use a theorem from the package "Mathlib.Data.Set.Basic" called <code class="single_command">Set.Subset.antisymm_iff</code>.
+In practice, if the goal is <code class="single_command">A = B</code>, then
+<code class="single_command">rw [Set.Subset.antisymm_iff]</code> changes the goal to <code class="single_command">A ⊆ B ∧ B ⊆ A</code>.
+</p>
+            <h3>5.5. Set Difference</h3>
+<dfn><div class="box">Review: </div></dfn>
+<ul>
+<li>x ∈ A \ B ↔ x ∈ A ∧ x ∉ B ("\\" for "\", "\notin" for "∉")</li> 
+<li><strong>Theorem 5.2.</strong> Let A be a set. Then A \ A = ∅.</li>
+<li><strong>Theorem 5.3.</strong> Let A, B, and C be sets. Then A \ (B ∪ C) = (A \ B) ∩ (A \ C).</li>
+</ul>
+<p>Notes (delete after): a theorem for 5.2, de morgan's laws for 5.3, same variable names for different goals</p>  
+<dfn><div class="box">In Lean: </div></dfn>
+<p>
+We will exactly follow the textbook's ways of proving these two theorems.
+</p>
+<p>
+In the textbook, the theorem 5.2. is proved by contradiction.
+It uses the fact that if a set is not empty, then there exists en element in the set.
+We need to use a theorem from "Mathlib.Data.Set.Basic" called 
+<code class="single_command">Set.eq_empty_iff_forall_not_mem</code>,
+which states that <code class="single_command">s = ∅ ↔ ∀ (x : α), x ∉ s</code>,
+where s is some set. Using this theorem, we can rewrite the goal from 
+<code class="single_command">A \ A = ∅</code> to <code class="single_command">∀ (x : α), x ∉ A \ A</code>.
+After introducing the arbitrary variable x, just follow the process of proof by contradiction.
+</p>
+<pre><code class="snippet"><span class="comment">-- 5.5.01 (Theorem 5.2.) Let A be a set. Then A \ A = ∅. </span>
+example : A \ A = ∅ := by
+  rw [Set.eq_empty_iff_forall_not_mem]
+  intro x
+  by_contra h
+  cases' h with h1 h2
+  contradiction
+</code></pre>
+<p>
+In the textbook, the proof for theorem 5.3. uses the fact that "x ∉ A ∪ B ↔ x ∉ A ∧ x ∉ B".
+This is a result from <em>De Morgan's Laws of sets</em>. 
+Since the textbook doesn't require you to prove it
+(or you've already proved it, depends on your instructor's requirement), 
+I implement this theorem in the file of this chapter for you to use directly.
+The theorem is called <code class="single_command">notin_union_iff_notin_and_notin</code>,
+which states that <code class="single_command">x ∉ A ∪ B ↔ x ∉ A ∧ x ∉ B</code>.
+Though not required, you are welcome to check how it's implemented.
+</p>
+<p>
+Another friendly reminder: If there are subgoals in your proof,
+after each subgoal is closed, the variables you declared in the subgoal will also disappear,
+so that you can use the same variable names for other subgoals.
+</p>
+<pre><code class="snippet"><span class="comment">-- 5.5.02 (Theorem 5.3.) Let A, B, and C be sets. 
+                         Then A \ (B ∪ C) = (A \ B) ∩ (A \ C).</span>
+example : A \ (B ∪ C) = (A \ B) ∩ (A \ C) := by
+  rw [Set.Subset.antisymm_iff]
+  constructor
+  -- ⊢ A \ (B ∪ C) ⊆ A \ B ∩ (A \ C)
+  · intro x
+    intro h1
+    cases' h1 with h1 h2
+    rw [notin_union_iff_notin_and_notin] at h2
+    cases' h2 with h2 h3
+    have h4 : x ∈ A \ B := by
+      constructor
+      · exact h1
+      · exact h2
+    have h5 : x ∈ A \ C := by
+      constructor
+      · exact h1
+      · exact h3
+    constructor
+    · exact h4
+    · exact h5
+  -- ⊢ A \ B ∩ (A \ C) ⊆ A \ (B ∪ C)
+  · intro x
+    intro h1
+    cases' h1 with h1 h2
+    cases' h1 with h11 h12
+    cases' h2 with h21 h22
+    constructor
+    · exact h11
+    · have h3 : x ∉ B ∧ x ∉ C := by
+        constructor
+        · exact h12
+        · exact h22
+        rw [notin_union_iff_notin_and_notin]
+        exact h3
+</code></pre>
+<p>
+The proof looks scary, but if you can understand the proof on the textbook, then you can also understand this one.
+At the second half of this guide we will introduce some other techniques for writing shorter proofs in Lean.
+</p>
+            <h3>5.6. Sets of sets</h3>
+<dfn><div class="box">Review: </div></dfn>
+<ul>
+<li>Sets of sets are also called <em>families</em>.</li>
+<li><strong>Definition 5.1.</strong> The power set of a set A is the set of all subsets of A, written as 𝒫(A). ("\power" for "𝒫")</li>
+<li>∀ A, ∅ ∈ 𝒫(A)</li>
+<li><strong>Theorem 5.4.</strong> Let A and B be sets. Then 𝒫(A) ⊆ 𝒫(A ∪ B)</li>
+<li><strong>Theorem 5.5.</strong> Let A and B be sets. Then A ∩ B = ∅ if and only if 𝒫(A) ∩ 𝒫(B) = {∅}.</li>
+</ul>
+<dfn><div class="box">In Lean: </div></dfn>
+command for definition, intro two at the same time, find theorems by self
+            <h4>5.6.1. Unions and Intersections of Families</h3>
+<dfn><div class="box">Review: </div></dfn>
+<p>If F is a family, then:</p>
+<ul>
+<li>∪ F = {a : there exists A ∈ F with a ∈ A}</li>
+<li>∩ F = {a : for all A ∈ F,a ∈ A}</li>
+<li><strong>Theorem 5.6.</strong> Let A and B be families. Then ⋃ (A ∩ B) ⊆ (⋃ A) ∩ (⋃ B).</li>
+</ul>
         </section>
         <section>
             <h2>Chapter 6: Proofs by Induction</h2>
