@@ -20,4 +20,5 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 3 ∣ (7 ^ n - 1) := by
     have h3 : 7 ^ (k + 1) = 7 * 7 ^ k := by
       exact pow_succ 7 k
     rw[h3]
+    have h4 : (7^k - 1) * 7 = 7^k * 7 - 7
     -- rewrite using function sub_mul and use ring

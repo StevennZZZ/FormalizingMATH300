@@ -6,5 +6,5 @@ variable {α : Type*}
 variable (A B C : Set α)
 
 -- 7.1 Prove: A × (B ∩ C) = (A × B) ∩ (A × C)
-example A × (B ∩ C) = (A × B) ∩ (A × C) := by
+example : A ×ˢ (B ∩ C) = (A ×ˢ B) ∩ (A ×ˢ C) := by
   sorry
