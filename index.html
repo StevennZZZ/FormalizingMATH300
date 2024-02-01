@@ -514,7 +514,7 @@ a + (-a) = 0: <code class="single_command">add_right_neg a</code><br>
 <!--8-->
 <li>
 <em><strong>Trichotomy: </strong></em>Exactly one of the following is true: a > 0, −a > 0, or a = 0.<br>
-In Lean: we will discuss about this property when we work on "proof by cases". (chapter 3)
+In Lean: lt_trichotomy a 0
 </li>
 <!--9-->
 <li>
@@ -1811,14 +1811,74 @@ The textbook gives a clear proof of this theorem.
 Let's see how we code a "Lean version" of this proof.
 </p>
 <dfn><div class="box">In Lean: </div></dfn>
-<div class="unfinished">theorem 3.1. proof. Intro to "theorem" and "unfold" keyword. May give two versions (one with unfold)</div>
+<pre><code class="snippet"><div class="comment">-- theorem 3.1. If a and b are even integers, then a + b is even.</div>
+theorem c3_1 {a b : ℤ} (h1 : Even a) (h2 : Even b) : Even (a + b) := by
+  cases' h1 with k1 h1
+  cases' h2 with k2 h2
+  use k1 + k2
+  rw [h1, h2]
+  ring
+</code></pre>
 <p>
+    If you find it hard to understand the proof, 
+    try thinking about the definition of "even" as logical expression.
+    That is, think about "even a" as "∃ k1 : ℤ, a = k1 + k1". Which tactic should you use to pull out something from a statement with existential quantifier?
+    What about the goal?
+</p>
 <dfn><div class="box">Review: </div></dfn>
-<p>
-    <strong>Theorem 3.2.</strong> Suppose a, b, and c are integers. If a|b and b|c, then a|c.
+ <p>  <strong>Theorem 3.2.</strong> Suppose a, b, and c are integers. If a|b and b|c, then a|c.
 </p>
 <dfn><div class="box">In Lean: </div></dfn>
-<div class="unfinished">theorem 3.2. proof. </div>
+<pre><code class="snippet"><div class="comment">-- theorem 3.2. Suppose a, b, and c are integers. If a|b and b|c, then a|c.</div>
+theorem c3_2 {a b c : ℤ} (h1 : a ∣ b) (h2 : b ∣ c) : a ∣ c := by
+  cases' h1 with k h1
+  cases' h2 with l h2
+  use k * l
+  rw [h2, h1]
+  ring
+</code></pre>
+<p>
+    That's it! We've successfully formalized two theorems from the textbook.
+    Note that we use the "theorem" command here, instead of the "example" command we used before.
+    The statement with "theorem" command can be used later.
+    Remember the EPI's table? All the commands we gave you are theorems from the Mathlib!
+</p>
+<h4>So...How to use a theorem?</h4>
+<p>A theorem typically looks like this:</p>
+<p><code class="single_command">theorem_name {a b c ... : Type} (h : prop) ... : content := ...</code></p>
+<p>Seems a little bit abstract. Let's see some real examples.
+    To EPI 3 - commutativity, the theorem is called <code class="single_command">add_comm</code> in Mathlib.
+    If you find that theorem in Mathlib, or if you move your cursor over the theorem somewhere in VS Code, it should look like this:
+</p>
+<p><code class="single_command">add_comm.{u_1} {G : Type u_1} [inst✝ : AddCommSemigroup G] (a b : G) : a + b = b + a</code></p>
+<p>Well, after the theorem name, you don't need to worry about anything in curly braces { } and square brackets [ ].
+    Those are called "implicit arguments", which Lean can infer by itself.
+    You only need to start from things with parentheses ( ).
+    Here, before the colon <code class="single_command">:</code>, 
+    we see that <code class="single_command">(a b : G)</code>.
+    Again, you don't need to know that G means here: just think of "integer" as a kind of G.
+    Therefore, given two integers as arguments to the theorem <code class="single_command">add_comm a b</code>,
+    it will return everything after the colon <code class="single_command">:</code>.
+    In this case, <code class="single_command">add_comm a b</code> gives us <code class="single_command">a + b = b + a</code>, 
+    a statement we can use by <code class="single_command">rw</code> or <code class="single_command">exact</code> tactic.
+</p>
+<p>
+Another example is the theorem we proved above. Move your cursor over the theorem name, you can see that:
+</p>
+<p><code class="single_command">c3_1 {a b : ℤ} (h1 : Even a) (h2 : Even b) : Even (a + b)</code></p>
+<p>
+Start from the parentheses: there are two hypotheses enclosed by hypotheses.
+Therefore, we need to give two propositions as arguments to the theorem, 
+where the two propositions both indicate that an integer is even.
+In our proof, if we have two propositions <code class="single_command">(h1 : Even a) (h2 : Even b)</code>,
+we can then use this command:
+</p>
+<p><code class="single_command">c3_1 h1 h2</code></p>
+<p>which returns the things after the colon <code class="single_command">: Even (a + b)</code>, 
+    which is a statement we can use. </p>
+<p>In short, if you want to use a theorem, just give it everything specified in the parentheses <strong>in order</strong>,
+and then it will return the statement after the colon for you to use. 
+We will do some practice in the next section.</p>
             <h4>3.1.1. Structure your proof in Lean</h4>
 <p>Let's continue our discussion about the "step-by-step" proof from the beginning of this chapter. 
 The two examples above are relatively simple and don't require much reasoning.
@@ -1891,11 +1951,7 @@ since the subgoal is already proved in this Lean file, we can use the theorem di
 We named this theorem "c3_1" above, which takes two hypotheses 
 <code class="single_command">(h1 : Even a) (h2 : Even b)</code>
 and outputs the result <code class="single_command">Even (a + b)</code>.
-(If you have some programming experience, 
-you can think of a theorem as a function.
-The hypotheses before the colon are the input arguments it needs to receive,
-and the goal after the colon is the output it gives.
-Your proof of the theorem followed by <code class="single_command">:= by</code> is the implementation of the function).
+(We've seen how to use a theorem.)
 In this case, "c3_1" needs to take two arguments that are the hypotheses to show that a and b are even,
 so we type <code class="single_command">c3_1 h1 h2</code>,
 and it will return the output (<code class="single_command">Even (a + b)</code>).
@@ -1935,8 +1991,136 @@ Applying these properties, we have:</p>
 <p>
 We've proved the underlying logic of <em>proof by cases</em>!
 </p>
+
+<dfn><div class="box">Review: </div></dfn>
+<p><strong>Theorem 3.3.</strong> The product of two consecutive integers is even.</p>
 <dfn><div class="box">In Lean: </div></dfn>
-<div class="unfinished">theorem 3.3, 3.4, 3.5 proof. </div>
+<p>
+The textbook first states the fact that an integer is either even or odd.
+Well, we can't just do the same thing in Lean: we need to prove it or use the theorem that's proved somewhere else. 
+We will prove its contrapositive later in this chapter, but for now let's use the theorem from Mathlib.
+You might have already seen that we imported "Mathlib.Data.Int.Parity" at the beginning of the file.
+It has the following theorem we will use:
+</p>
+<p><code class="single_command">Int.even_or_odd (n : ℤ) : Even n ∨ Odd n</code></p>
+<p>It states that an integer is even or odd. 
+    If we type <code class="single_command">Int.even_or_odd n</code>, where n is an integer declared ealier,
+it will output <code class="single_command">Even n ∨ Odd n</code>. This is all we need!</p>
+<pre><code class="snippet"><div class="comment">-- 3.2.1 (Theorem 3.3.) The product of two consecutive integers is even.</div>
+theorem c3_3 (n : ℤ) : Even (n * (n + 1)) := by
+  have h : Even n ∨ Odd n := by
+    exact Int.even_or_odd n
+  cases' h with heven hodd
+  · cases' heven with k heven
+    use k * (n + 1)
+    rw [heven]
+    ring
+  · cases' hodd with k hodd
+    use n * (k + 1)
+    rw [hodd]
+    ring
+</code></pre>
+<dfn><div class="box">Review: </div></dfn>
+<p><strong>Theorem 3.4.</strong> (Elementary Properties of Absolute Value). Suppose a and b are integers. Then:</p>
+<ul>
+<li>(a) |a| ≥ 0.</li>
+<li>(b) |−a| = |a|.</li>
+<li>(c) −|a| ≤ a ≤ |a|.</li>
+<li>(d) |a|^2 = a^2.</li>
+<li>(e) |ab| = |a||b|.</li>
+<li>(f) |a| ≤ |b| if and only if −|b| ≤ a ≤ |b|.</li>
+</ul>
+<dfn><div class="box">In Lean: </div></dfn>
+<p>We will use the theorem of trichotomy from EPIs table:</p>
+<p><code class="single_command">lt_trichotomy.{u} {α : Type u} [inst✝ : LinearOrder α] (a b : α) : a < b ∨ a = b ∨ b < a</code></p>
+<p>Again, just look at things in the parentheses: <code class="single_command">(a b : α)</code>.
+Before chapter 5, please take my words: I will always give you the right theorem, 
+so don't worry about what α means here. It's a problem about integers, so just input two integers.
+In chapter 5, I will explain more about what {α : Type u} means here. By that time,
+you should be able to understand any theorem and later look for theorems by yourself.
+Let's take time :)</p>
+<p>To prove these theorems, let me introduce two new powerful tactics for you.
+    They are really really powerful!
+</p>
+            <h4>3.2.01 rcases</h5>
+<p>If b is 0, then <code class="single_command">lt_trichotomy a 0</code> will outputs 
+<code class="single_command">a < 0 ∨ a = 0 ∨ 0 < a</code>.
+It's slightly different from the textbook, which has three cases, but they are essentially the same:
+"a ≥ 0" is equivalent to "a > 0 ∨ a = 0".</p>
+<p>
+You might want to use <code class="single_command">cases'</code> tactic,
+but I forgot to tell you one fact: <code class="single_command">cases'</code> can only seperate a statement to two statements.
+In this case, it is only able to split the output to <code class="single_command">a < 0</code> and <code class="single_command">a = 0 ∨ a > 0</code>,
+as Lean pull out statements from logical connectives in order. 
+Frustratingly, you need to use <code class="single_command">cases'</code> again to split the second statement to two statements.
+</p>
+<p>
+Is there one way to seperate the cases all at once? There is!
+We can do this <strong>recursively</strong> by <code class="single_command">rcases</code> command. "r" stands for "recursive".
+</p>
+<p>If the hypothesis is <code class="single_command">h : P ∨ Q ∨ R</code>, 
+type <code class="single_command">rcases h with hp | hq | hr</code> to seperate the hypothesis to 
+<code class="single_command">hp: P</code>, <code class="single_command">hq: Q</code>, and <code class="single_command">hr: R</code>. 
+If the hypothesis is <code class="single_command">h : P ∧ Q ∧ R</code>, 
+    type <code class="single_command">rcases h with ⟨hp hq hr⟩</code> to seperate the hypothesis to 
+    <code class="single_command">hp: P</code>, <code class="single_command">hq: Q</code>, and <code class="single_command">hr: R</code>. 
+In short, <code class="single_command">|</code> for disjunctions, and <code class="single_command">⟨⟩</code> for conjunctions.
+In VS Code, type "\<" for "⟨" and "\>" for "⟩". 
+This tactic is a recursive version of <code class="single_command">cases'</code>,
+so it can do everything that <code class="single_command">cases'</code> can do. 
+Feel free to stick to it.
+</p>
+            <h4>3.2.02 linarith</h5>
+<p>The proof in the textbook use the fact that if a < 0, then -a > 0.
+This is an example of <strong>linear inequality</strong>.
+For any goal as linear equalities and inequalities, with enough information provided in the assumptions, you can use the <code class="single_command">linarith</code> tactic.
+For example, if the assumptions are <code class="single_command">(h1 : a < b)</code> and <code class="single_command">(h2 : b < c)</code>
+and your goal is <code class="single_command">a < c</code>, just type <code class="single_command">linarith</code>.
+It will close the goal immediately. Keep in mind that the expression should be <strong>linear</strong>,
+which means the variables are linearly combined.
+It's a powerful tactic, but don't use it everywhere blindly.
+
+</p>
+<p>Also, two axioms about absolute value for you ~ (I omit some unimportant information)</p>
+<p><code class="single_command">abs_of_neg ... {a : α} (h : a < 0) : |a| = -a</code></p>
+<p><code class="single_command">abs_of_pos ... {a : α} (h : 0 < a) : |a| = a</code></p>
+<pre><code class="snippet"><div class="comment">-- 3.2.2 |a| ≥ 0.</div>
+theorem c3_4_1 {a : ℤ} : |a| ≥ 0 := by
+  have h : a < 0 ∨ a = 0 ∨ a > 0 := by
+    exact lt_trichotomy a 0
+  rcases h with h1 | h2 | h3
+    · have h : |a| = -a := by
+        exact abs_of_neg h1
+      rw [h]
+      linarith
+    · have h : |a| = a:= by
+        rw [h2]
+        exact abs_zero
+      rw [h]
+      linarith
+    · have h : |a| = a := by
+        exact abs_of_pos h3
+      rw [h]
+      linarith
+</code></pre>
+
+<pre><code class="snippet"><div class="comment">-- 3.2.3. |-a| = |a|</div>
+theorem c3_4_2 {a : ℤ} : |-a| = |a| := by
+  have h : a < 0 ∨ a = 0 ∨ a > 0 := by
+    exact lt_trichotomy a 0
+  rcases h with h1 | h2 | h3
+    · have h : -a > 0 := by
+        linarith
+      rw [abs_of_pos h, abs_of_neg h1]
+    · rw [h2]
+      norm_num
+    · have h : -a < 0 := by
+        linarith
+      rw [abs_of_neg h, abs_of_pos h3]
+      ring
+</code></pre>
+
+
             <h3>3.3. Proof by contrapositive</h3>
 <p>
 Recall that P → Q ≡ ¬Q → ¬P. To change a goal from P → Q to ¬Q → ¬P in a Lean proof,
