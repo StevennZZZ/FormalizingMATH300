@@ -20,5 +20,14 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 3 ∣ (7 ^ n - 1) := by
     have h3 : 7 ^ (k + 1) = 7 * 7 ^ k := by
       exact pow_succ 7 k
     rw[h3]
-    have h4 : (7^k - 1) * 7 = 7^k * 7 - 7
-    -- rewrite using function sub_mul and use ring
+    rw [Nat.mul_sub_right_distrib, Nat.sub_eq_of_eq_add]
+    rw [Nat.add_assoc]
+    norm_num
+    rw [Nat.sub_add_cancel]
+    rw [Nat.mul_comm 7 (7 ^ k)]
+    norm_num
+    have h: 1 = 7^0 := by norm_num
+    rw [h]
+    apply Nat.pow_le_pow_of_le_right
+    linarith
+    linarith
