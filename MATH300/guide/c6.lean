@@ -60,9 +60,18 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 2 ^ n >= 2 * n := by
     apply Nat.le_induction
     · linarith
     · intro k hn h1
-      --rw[pow_succ, mul_add]
-      --apply h1
-      rw[mul_add, mul_one]
-      have h2 : 2 * k + 2 * k >= 2 * 1 * k + 2 * 1 := by
+      rw[pow_succ]
+      have h2 : 2 <= 2 := by
         linarith
-      rw[← mul_one 2, ← h2] -- error for some reason ??
+      have h3 : 2 * 2 ^ k >= 2 * 2 * k := by
+        Nat.mul_le_mul h1 h2 -- why unknown tactic? i got it from moogle
+
+
+
+
+
+
+
+
+
+-- Theorem 6.5
