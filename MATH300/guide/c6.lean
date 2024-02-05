@@ -31,4 +31,3 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 3 ∣ (7 ^ n - 1) := by
     apply Nat.pow_le_pow_of_le_right
     linarith
     linarith
-     
