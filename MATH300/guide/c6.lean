@@ -32,7 +32,7 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 3 ∣ (7 ^ n - 1) := by
     linarith
     linarith
 
-    -- 6.2.01 Theorem 6.3
+-- 6.2.02 Theorem 6.3
 example : ∀ (n : ℕ) (hn : 1 ≤ n), 5 ∣ (8 ^ n - 3 ^ n) := by
   apply Nat.le_induction
   · use 1
@@ -51,11 +51,15 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 5 ∣ (8 ^ n - 3 ^ n) := by
     have h4 : 3 ^ (k + 1) = 3 * 3 ^ k := by
       exact pow_succ 3 k
     rw[h4]
-    -- have h5 : 3 * 8 ^ k - 3 * 8 ^k = 0 := by
+    have h5 : 3 * 8 ^ k - 3 * 8 ^k = 0 := by
     --  ring_nf
-    rw[← sub_mul 8^k 3] -- error ??
+    -- rw[← sub_mul 8^k 3] -- error ??
+    -- rw only works for equivalence, not implication
+      norm_num
 
- -- Theorem 6.4
+
+
+-- 6.2.03 (Theorem 6.4)
 example : ∀ (n : ℕ) (hn : 1 ≤ n), 2 ^ n >= 2 * n := by
     apply Nat.le_induction
     · linarith
@@ -63,10 +67,16 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 2 ^ n >= 2 * n := by
       rw[pow_succ]
       have h2 : 2 <= 2 := by
         linarith
-      have h3 : 2 * 2 ^ k >= 2 * 2 * k := by
-        Nat.mul_le_mul h1 h2 -- why unknown tactic? i got it from moogle
-
-
+      have h3 : 2 * 2 ^ k >= 2 * (2 * k) := by
+        -- Nat.mul_le_mul h1 h2 -- why unknown tactic? i got it from moogle
+        -- need a tactic to use the theorem
+        exact Nat.mul_le_mul h2 h1
+      have htemp : 2 * (2 * k) = 2 * k + 2 * k := by
+        ring
+      rw [htemp] at h3
+      have h4 : 2 * k + 2 * k >= 2 * (k + 1) := by
+        linarith
+      exact le_trans h4 h3
 
 
 
