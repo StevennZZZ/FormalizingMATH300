@@ -56,7 +56,7 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 5 ∣ (8 ^ n - 3 ^ n) := by
     -- rw[← sub_mul 8^k 3] -- error ??
     -- rw only works for equivalence, not implication
       norm_num
-
+    rw [Nat.add_sub_self_right]
 
 
 -- 6.2.03 (Theorem 6.4)
