@@ -78,6 +78,22 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 2 ^ n >= 2 * n := by
         linarith
       exact le_trans h4 h3
 
+-- 6.2.04 (Theorem 6.5)
+example : ∀ (n : ℕ) (hn : 1 ≤ n), Nat.factorial n <= n ^ n := by
+    apply Nat.le_induction
+    · norm_num
+    · intro k hn h1
+      rw[Nat.factorial_succ]
+      have h2 : (k + 1) * Nat.factorial k <= (k + 1) * k ^ k := by
+        rw[mul_le_mul_left]
+        exact h1
+      have h3 : (k + 1) * k ^ k < (k + 1) * (k + 1) ^ k := by
+        rw[mul_le_mul_left (k+1)]
+        -- exercise 6.2
+      have 
+
+
+
 
 
 
