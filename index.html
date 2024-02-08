@@ -70,6 +70,22 @@
             margin: 0;
             padding: 0;
         }
+        /*added directory part*/
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #f2f2f2;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        main {
+            margin-left: 250px;
+            padding: 20px;
+        }
 
 
     </style>
@@ -79,7 +95,11 @@
     <header>
         <h1>MATH300 in Lean 4</h1>
     </header>
-
+    <nav class="sidebar">
+        <ul>
+            <li><a href="#c1">Chapter 1: Preliminaries</a></li>
+        </ul>
+    </nav>
     <main>
         <section id="c1">
             <h2>Chapter 1: Preliminaries</h2>
