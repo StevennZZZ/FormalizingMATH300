@@ -75,7 +75,7 @@
             position: fixed;
             left: 0;
             top: 0;
-            width: 250px;
+            width: 300px;
             height: 100%;
             background-color: #f2f2f2;
             overflow-y: auto;
@@ -83,9 +83,30 @@
         }
 
         main {
-            margin-left: 250px;
+            margin-left: 320px;
             padding: 20px;
         }
+
+        /*added new code*/
+        .sidebar ul {
+    list-style-type: none;
+    margin: 0; /* 添加 margin 为 0 */
+    padding-left: 10px; /* 添加左填充，确保文本不会紧贴边缘 */
+    /* ... 其他样式保持不变 ... */
+}
+
+.sidebar li {
+    padding: 5px 0; /* 增加上下填充，使得列表更易读 */
+    /* ... 其他样式保持不变 ... */
+}
+
+/* 可以增加一个样式规则来确保文字不会溢出侧边栏 */
+.sidebar a {
+    white-space: nowrap; /* 防止文字换行 */
+    overflow: hidden; /* 隐藏溢出的文字 */
+    text-overflow: ellipsis; /* 显示省略号表示文字被截断 */
+    display: block; /* 使链接显示为块级元素，占满整个容器宽度 */
+}
 
 
     </style>
