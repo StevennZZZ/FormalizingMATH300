@@ -1,4 +1,5 @@
 import Mathlib.Data.Real.Basic
+import Mathlib.Data.Nat.Basic
 
 -- 6.1 Prove: If a is a non-negative integer,
 --            then aⁿ ≥ 0 for all n ∈ N.
@@ -7,9 +8,10 @@ example {a : ℕ} : ∀ n : ℕ, a^n ≥ 0 := by
 
 -- 6.2 Prove: If a and b are non-negative integers
 --     such that a < b, then aⁿ < bⁿ for all n ∈ ℕ.
-example {a b : ℕ} :
-        ∀ n : ℕ, a < b → a^n < b^n := by
-  sorry
+example {a b n : ℕ} (hn : 1 ≤ n) :
+        ∀ n : ℕ, n > 0 → a < b → a^n < b^n := by
+  apply Nat.le_induction
+
 
 -- 6.3 Let n be a positive integer.
 --     Use induction to prove that 9 | 10ⁿ −1.
