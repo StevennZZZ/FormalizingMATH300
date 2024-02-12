@@ -36,3 +36,23 @@ example {n : ℤ} (h : 4 ∣ n) : 76 * n ≡ n [ZMOD 100] := by
   sorry
 
 -- 8.6, 8.7, 8.8 skip
+
+def f (m a b: ℤ) : Prop := ∃ k, a = b + m*k--(a = b + k * m)
+
+
+-- a = b + k * m : ℕ
+
+
+
+lemma reflexive_mod (m: ℤ) (h: m > 0) :  Reflexive (f m) := by
+  unfold Reflexive
+  intro x
+  unfold f
+  exists 0
+  ring
+
+lemma symmetric_mod (m: ℤ) : Symmetric (f m) := by
+  sorry
+
+lemma transitive_mod (m: ℤ) : Transitive (f m) := by
+  sorry
