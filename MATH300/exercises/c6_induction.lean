@@ -17,6 +17,23 @@ example {a b n : ℕ} (hn : 1 ≤ n) :
 --     Use induction to prove that 9 | 10ⁿ −1.
 example {n : ℕ} (hn : n > 0) : 9 ∣ 10^n - 1 := by
   sorry
+example : ∀ (n : ℕ) (hn : 1 ≤ n), 9 ∣ 10^n - 1 := by
+  apply Nat.le_induction
+  · norm_num
+  · intro k hn h1
+    rcases h1 with ⟨m, h1⟩
+    use 10 * m + 1
+    have h2 : 9 * (10 * m + 1) = 9 * m * 10 + 9 := by
+      ring
+    rw [h2, ← h1]
+    have h3 : 10 ^ (k + 1) = 10 * 10 ^ k := by
+      exact pow_succ 10 k
+    rw[h3]
+    
+
+
+
+
 
 -- 6.4 Let n be a positive integer.
 --     Use induction to prove that 8 |3²ⁿ −1.

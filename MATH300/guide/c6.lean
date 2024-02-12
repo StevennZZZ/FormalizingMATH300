@@ -90,7 +90,7 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), Nat.factorial n <= n ^ n := by
       have h3 : (k + 1) * k ^ k < (k + 1) * (k + 1) ^ k := by
         rw[mul_le_mul_left (k+1)]
         -- exercise 6.2
-      have 
+      have h4 : (k + 1) * (k + 1) ^ k = (k + 1) ^ (k + 1) := by
 
 
 
