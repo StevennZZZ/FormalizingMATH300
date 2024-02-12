@@ -1,5 +1,9 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Nat.Basic
+import Mathlib.Algebra.BigOperators.Basic
+import Mathlib.Data.Nat.Factorial.Basic
+
+#check 2!
 
 -- Notice that in Lean ℕ starts at 0
 -- While in textbook ℕ starts at 1
@@ -79,25 +83,24 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 2 ^ n >= 2 * n := by
       exact le_trans h4 h3
 
 -- 6.2.04 (Theorem 6.5)
-example : ∀ (n : ℕ) (hn : 1 ≤ n), Nat.factorial n <= n ^ n := by
-    apply Nat.le_induction
-    · norm_num
-    · intro k hn h1
-      rw[Nat.factorial_succ]
-      have h2 : (k + 1) * Nat.factorial k <= (k + 1) * k ^ k := by
-        rw[mul_le_mul_left]
-        exact h1
-      have h3 : (k + 1) * k ^ k < (k + 1) * (k + 1) ^ k := by
-        rw[mul_le_mul_left (k+1)]
-        -- exercise 6.2
-      have h4 : (k + 1) * (k + 1) ^ k = (k + 1) ^ (k + 1) := by
-
-
-
-
-
-
+-- example : ∀ (n : ℕ) (hn : 1 ≤ n), Nat.factorial n <= n ^ n := by
+--     apply Nat.le_induction
+--     · norm_num
+--     · intro k hn h1
+--       rw[Nat.factorial_succ]
+--       have h2 : (k + 1) * Nat.factorial k <= (k + 1) * k ^ k := by
+--         rw[mul_le_mul_left]
+--         exact h1
+--       have h3 : (k + 1) * k ^ k < (k + 1) * (k + 1) ^ k := by
+--         rw[mul_le_mul_left (k+1)]
+--         -- exercise 6.2
+--       have h4 : (k + 1) * (k + 1) ^ k = (k + 1) ^ (k + 1) := by
 
 
 
 -- Theorem 6.5
+
+-- Theorem 6.6
+example : ∀ (n : ℕ) (hn : 1 ≤ n), (Finset.sum (Finset.range n) fun i => i) = n * (n - 1) / 2 := by
+  sorry
+

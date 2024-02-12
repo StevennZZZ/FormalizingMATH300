@@ -58,13 +58,42 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 8 ∣ 3^(2 * n) - 1 := by
   · intro k hn h1
     rcases h1 with ⟨m, h1⟩
     use 9 * m + 1
-    have 
+    have h2 : 8 * (9 * m + 1) = 8 * m * 9 + 8 := by
+      ring
+    rw[h2, ← h1]
+    have h3 : 3^(2 * (k+1)) = 3 ^ (2 * k) * 3 ^ 2 := by
+      rw[mul_add, mul_one]
+      rw[← one_add_one_eq_two, add_assoc (1+1)]
+      -- 2 * (k + 1) = 2 * k + 2 = ((2 * k) + 1) + 1
+      rw[pow_succ, pow_succ]
+    rw[h3]
+    rw [Nat.mul_sub_right_distrib, Nat.sub_eq_of_eq_add]
+    rw [Nat.add_assoc]
+    norm_num
+    rw [Nat.sub_add_cancel]
+    rw [Nat.mul_comm]
+    norm_num
+    have h : 1 = 3 ^ 0 := by norm_num
+    rw[h]
+    apply Nat.pow_le_pow_of_le_right
+    linarith
+    linarith
+
+
+
 
 
 -- 6.5 Let n be a positive integer.
 --     Use induction to prove that 6 |n³ −n.
 example {n : ℕ} (hn : n > 0) : 6 ∣ n^3 - n := by
   sorry
+
+example : ∀ (n : ℕ) (hn : 1 ≤ n) , ∃ m , n * (n+1) = 2 * m := by
+  intro n hn
+  --apply?
+  refine ex_of_PSigma
+  sorry
+
 
 -- 6.6 Let n be a positive integer.
 --     Use induction to prove that
