@@ -1,4 +1,5 @@
-import Mathlib.Tactic
+import Mathlib.Data.Real.Basic
+import Mathlib.Data.Int.ModEq
 
 section -- 8.1
 
