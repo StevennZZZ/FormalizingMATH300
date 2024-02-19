@@ -88,6 +88,39 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 8 ∣ 3^(2 * n) - 1 := by
 example {n : ℕ} (hn : n > 0) : 6 ∣ n^3 - n := by
   sorry
 
+example : ∀ (n : ℕ) (hn : 1 ≤ n), 6 ∣ n^3 - n := by
+  apply Nat.le_induction
+  · norm_num
+  · intro k hn h1
+    rcases h1 with ⟨m, h1⟩
+    have h2 : (k+1)^3 - (k+1) = k^3 + 3 * k^2 + 3 * k -k := by
+      --apply?
+      norm_num -- why isnt this working??
+      --rfl
+    rw[h2]
+    have h3 : 3 * k^2 + 3 * k = 3 * k * (k+1) := by
+      norm_num
+    rw[add_assoc, h3]
+    -- rw[add_assoc, h1]
+    have h4 : k^3 + 3 * k * (k+1) -k = k^3 -k + 3 * k * (k+1) := by
+      rw[add_assoc]
+    rw[h4, h1]
+    have h5 : 2 | k^3 -k + 3 * k * (k+1) := by
+      apply Nat.even_add_one -- Even (n + 1) ↔ ¬Even n
+      apply Nat.even_mul     -- Even (m * n) ↔ Even m ∨ Even n
+    
+
+
+
+
+
+
+
+
+
+
+
+
 example : ∀ (n : ℕ) (hn : 1 ≤ n) , ∃ m , n * (n+1) = 2 * m := by
   intro n hn
   --apply?
