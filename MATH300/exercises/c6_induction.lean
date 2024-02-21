@@ -3,8 +3,6 @@ import Mathlib.Data.Nat.Basic
 
 -- 6.1 Prove: If a is a non-negative integer,
 --            then aⁿ ≥ 0 for all n ∈ N.
-example {a : ℕ} : ∀ n : ℕ, a^n ≥ 0 := by
-  sorry
 
 example : ∀ (n : ℕ) (hn : 1 ≤ n), a^n ≥ 0 := by
   -- why does it have the red line under hn?
@@ -25,14 +23,12 @@ example {a b n : ℕ} (hn : 1 ≤ n) :
 example : ∀ (n : ℕ) (hn : 1 ≤ n) (h2 : a < b), a^n < b^n := by
   apply Nat.le_induction
   · norm_num
-  · 
+  · sorry
 
 
 
 -- 6.3 Let n be a positive integer.
 --     Use induction to prove that 9 | 10ⁿ −1.
-example {n : ℕ} (hn : n > 0) : 9 ∣ 10^n - 1 := by
-  sorry
 
 example : ∀ (n : ℕ) (hn : 1 ≤ n), 9 ∣ 10^n - 1 := by
   apply Nat.le_induction
@@ -58,15 +54,8 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 9 ∣ 10^n - 1 := by
     linarith
     linarith
 
-
-
-
-
-
 -- 6.4 Let n be a positive integer.
 --     Use induction to prove that 8 |3²ⁿ −1.
-example {n : ℕ} (hn : n > 0) : 8 ∣ 3^(2 * n) - 1 := by
-  sorry
 
 example : ∀ (n : ℕ) (hn : 1 ≤ n), 8 ∣ 3^(2 * n) - 1 := by
   apply Nat.le_induction
@@ -95,14 +84,8 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 8 ∣ 3^(2 * n) - 1 := by
     linarith
     linarith
 
-
-
-
-
 -- 6.5 Let n be a positive integer.
 --     Use induction to prove that 6 |n³ −n.
-example {n : ℕ} (hn : n > 0) : 6 ∣ n^3 - n := by
-  sorry
 
 example : ∀ (n : ℕ) (hn : 1 ≤ n), 6 ∣ n^3 - n := by
   apply Nat.le_induction
@@ -124,15 +107,6 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 6 ∣ n^3 - n := by
     have h5 : 2 | k^3 -k + 3 * k * (k+1) := by
       apply Nat.even_add_one -- Even (n + 1) ↔ ¬Even n
       apply Nat.even_mul     -- Even (m * n) ↔ Even m ∨ Even n
-
-
-
-
-
-
-
-
-
 
 
 
