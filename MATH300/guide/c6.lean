@@ -110,3 +110,4 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), n^2 - n >= 0 := by
   rw[mul_one] -- n * n - n * 1
   rw[← mul_sub] -- n * (n-1)
   linarith
+  
