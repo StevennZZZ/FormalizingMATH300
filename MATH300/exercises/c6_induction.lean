@@ -6,11 +6,27 @@ import Mathlib.Data.Nat.Basic
 example {a : ℕ} : ∀ n : ℕ, a^n ≥ 0 := by
   sorry
 
+example : ∀ (n : ℕ) (hn : 1 ≤ n), a^n ≥ 0 := by
+  -- why does it have the red line under hn?
+  apply Nat.le_induction
+  · norm_num
+  · -- intro k hn h1
+    norm_num
+
+
+
 -- 6.2 Prove: If a and b are non-negative integers
 --     such that a < b, then aⁿ < bⁿ for all n ∈ ℕ.
 example {a b n : ℕ} (hn : 1 ≤ n) :
         ∀ n : ℕ, n > 0 → a < b → a^n < b^n := by
   apply Nat.le_induction
+
+-- can I write it like this instead ?
+example : ∀ (n : ℕ) (hn : 1 ≤ n) (h2 : a < b), a^n < b^n := by
+  apply Nat.le_induction
+  · norm_num
+  · 
+
 
 
 -- 6.3 Let n be a positive integer.
@@ -108,7 +124,7 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 6 ∣ n^3 - n := by
     have h5 : 2 | k^3 -k + 3 * k * (k+1) := by
       apply Nat.even_add_one -- Even (n + 1) ↔ ¬Even n
       apply Nat.even_mul     -- Even (m * n) ↔ Even m ∨ Even n
-    
+
 
 
 
