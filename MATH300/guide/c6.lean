@@ -106,8 +106,8 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), (Finset.sum (Finset.range n) fun i => i)
 
 -- 6.2.04 (Theorem 6.8)
 example : ∀ (n : ℕ) (hn : 1 ≤ n), n^2 - n >= 0 := by
-  rw[pow_two] -- n * n - n
-  rw[mul_one] -- n * n - n * 1
-  rw[← mul_sub] -- n * (n-1)
+  intro n
+  rw[pow_two n] -- n * n - n
+  intro h
   linarith
   
