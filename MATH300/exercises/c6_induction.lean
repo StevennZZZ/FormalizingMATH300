@@ -1,10 +1,18 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Nat.Basic
+import Mathlib.Data.Nat.Parity
 
 -- 6.1 Prove: If a is a non-negative integer,
 --            then aⁿ ≥ 0 for all n ∈ N.
-example {a : ℕ} : ∀ n : ℕ, a^n ≥ 0 := by
-  sorry
+
+example : ∀ (n : ℕ) (hn : 1 ≤ n), a^n ≥ 0 := by
+  -- why does it have the red line under hn?
+  apply Nat.le_induction
+  · norm_num
+  · -- intro k hn h1
+    norm_num
+
+
 
 -- 6.2 Prove: If a and b are non-negative integers
 --     such that a < b, then aⁿ < bⁿ for all n ∈ ℕ.
@@ -12,11 +20,16 @@ example {a b n : ℕ} (hn : 1 ≤ n) :
         ∀ n : ℕ, n > 0 → a < b → a^n < b^n := by
   apply Nat.le_induction
 
+-- can I write it like this instead ?
+example : ∀ (n : ℕ) (hn : 1 ≤ n) (h2 : a < b), a^n < b^n := by
+  apply Nat.le_induction
+  · norm_num
+  · sorry
+
+
 
 -- 6.3 Let n be a positive integer.
 --     Use induction to prove that 9 | 10ⁿ −1.
-example {n : ℕ} (hn : n > 0) : 9 ∣ 10^n - 1 := by
-  sorry
 
 example : ∀ (n : ℕ) (hn : 1 ≤ n), 9 ∣ 10^n - 1 := by
   apply Nat.le_induction
@@ -42,15 +55,8 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 9 ∣ 10^n - 1 := by
     linarith
     linarith
 
-
-
-
-
-
 -- 6.4 Let n be a positive integer.
 --     Use induction to prove that 8 |3²ⁿ −1.
-example {n : ℕ} (hn : n > 0) : 8 ∣ 3^(2 * n) - 1 := by
-  sorry
 
 example : ∀ (n : ℕ) (hn : 1 ≤ n), 8 ∣ 3^(2 * n) - 1 := by
   apply Nat.le_induction
@@ -79,14 +85,48 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 8 ∣ 3^(2 * n) - 1 := by
     linarith
     linarith
 
-
-
-
-
 -- 6.5 Let n be a positive integer.
 --     Use induction to prove that 6 |n³ −n.
-example {n : ℕ} (hn : n > 0) : 6 ∣ n^3 - n := by
-  sorry
+
+example : ∀ (n : ℕ) (hn : 1 ≤ n), 6 ∣ n^3 - n := by
+  apply Nat.le_induction
+  · norm_num
+  · intro k hn h1
+    rcases h1 with ⟨m, h1⟩
+    have h2 : (k+1)^3 - (k+1) = k^3 + 3 * k^2 + 3 * k -k := by
+      --apply?
+      norm_num -- why isnt this working??
+      ring_nf
+      -- rfl
+      sorry
+    rw[h2]
+    have h3 : 3 * k^2 + 3 * k = 3 * k * (k+1) := by
+      norm_num
+      ring_nf
+    rw[add_assoc, h3]
+    -- rw[add_assoc, h1]
+    have h4 : k^3 + 3 * k * (k+1) -k = k^3 -k + 3 * k * (k+1) := by
+      norm_num
+      --rw[add_assoc k^3 -k 3*k*(k+1)]
+      sorry
+    rw[h4, h1]
+    --have h5 : 2 ∣ k^3 -k + 3 * k * (k+1) := by
+    have h5a : Even (k * (k + 1)) := by
+      exact Nat.even_mul_succ_self k
+    rcases h5a with ⟨l, h5a⟩
+    rw[mul_assoc 3 k (k + 1), h5a]
+    rw[← two_mul]
+    rw[← mul_assoc]
+    norm_num
+    rw[← mul_add]
+    norm_num
+
+
+
+
+
+
+
 
 example : ∀ (n : ℕ) (hn : 1 ≤ n) , ∃ m , n * (n+1) = 2 * m := by
   intro n hn

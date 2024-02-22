@@ -3,8 +3,6 @@ import Mathlib.Data.Nat.Basic
 import Mathlib.Algebra.BigOperators.Basic
 import Mathlib.Data.Nat.Factorial.Basic
 
-#check 2!
-
 -- Notice that in Lean ℕ starts at 0
 -- While in textbook ℕ starts at 1
 -- We therefore need to include an additional hypothesis
@@ -104,3 +102,9 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 2 ^ n >= 2 * n := by
 example : ∀ (n : ℕ) (hn : 1 ≤ n), (Finset.sum (Finset.range n) fun i => i) = n * (n - 1) / 2 := by
   sorry
 
+-- 6.2.04 (Theorem 6.8)
+example : ∀ (n : ℕ) (hn : 1 ≤ n), n^2 - n >= 0 := by
+  intro n
+  rw[pow_two n]
+  intro h
+  linarith
