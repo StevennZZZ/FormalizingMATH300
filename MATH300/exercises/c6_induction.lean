@@ -1,5 +1,6 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Nat.Basic
+import Mathlib.Data.Nat.Parity
 
 -- 6.1 Prove: If a is a non-negative integer,
 --            then aⁿ ≥ 0 for all n ∈ N.
@@ -95,18 +96,34 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 6 ∣ n^3 - n := by
     have h2 : (k+1)^3 - (k+1) = k^3 + 3 * k^2 + 3 * k -k := by
       --apply?
       norm_num -- why isnt this working??
-      --rfl
+      ring_nf
+      -- rfl
+      sorry
     rw[h2]
     have h3 : 3 * k^2 + 3 * k = 3 * k * (k+1) := by
       norm_num
+      ring_nf
     rw[add_assoc, h3]
     -- rw[add_assoc, h1]
     have h4 : k^3 + 3 * k * (k+1) -k = k^3 -k + 3 * k * (k+1) := by
-      rw[add_assoc]
+      norm_num
+      --rw[add_assoc k^3 -k 3*k*(k+1)]
+      sorry
     rw[h4, h1]
-    have h5 : 2 | k^3 -k + 3 * k * (k+1) := by
-      apply Nat.even_add_one -- Even (n + 1) ↔ ¬Even n
-      apply Nat.even_mul     -- Even (m * n) ↔ Even m ∨ Even n
+    --have h5 : 2 ∣ k^3 -k + 3 * k * (k+1) := by
+    have h5a : Even (k * (k + 1)) := by
+      exact Nat.even_mul_succ_self k
+    rcases h5a with ⟨l, h5a⟩
+    rw[mul_assoc 3 k (k + 1), h5a]
+    rw[← two_mul]
+    rw[← mul_assoc]
+    norm_num
+    rw[← mul_add]
+    norm_num
+
+
+
+
 
 
 
