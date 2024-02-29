@@ -1,6 +1,9 @@
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Nat.Basic
 import Mathlib.Data.Nat.Parity
+import Mathlib.Algebra.BigOperators.Basic
+
+open BigOperators
 
 -- 6.1 Prove: If a is a non-negative integer,
 --            then aⁿ ≥ 0 for all n ∈ N.
@@ -121,19 +124,21 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 6 ∣ n^3 - n := by
     rw[← mul_add]
     norm_num
 
-
-
-
-
-
-
-
 example : ∀ (n : ℕ) (hn : 1 ≤ n) , ∃ m , n * (n+1) = 2 * m := by
   intro n hn
   --apply?
   refine ex_of_PSigma
   sorry
 
+-- 6.6 Let n be a positive integer. Use induction to prove that
+example (n : ℤ) : ∑ i in range n, i * i! = (n + 1)! -1 := by
+sorry
 
--- 6.6 Let n be a positive integer.
---     Use induction to prove that
+--6.7 Let n be a positive integer, prove
+-- problem presented in MIL chapter 5.2
+example (n : ℕ) : ∑ i in range (n + 1), i ^ 2 = n * (n + 1) * (2 * n + 1) / 6 := by
+  sorry
+
+-- 6.9 Let n be a positive integer
+example (n : ℕ) : ∑ i in range (n + 1), 2 ^ n > n := by
+  sorry

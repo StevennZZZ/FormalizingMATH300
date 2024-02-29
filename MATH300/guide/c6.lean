@@ -3,6 +3,8 @@ import Mathlib.Data.Nat.Basic
 import Mathlib.Algebra.BigOperators.Basic
 import Mathlib.Data.Nat.Factorial.Basic
 
+open BigOperators
+
 -- Notice that in Lean ℕ starts at 0
 -- While in textbook ℕ starts at 1
 -- We therefore need to include an additional hypothesis
@@ -81,25 +83,28 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 2 ^ n >= 2 * n := by
       exact le_trans h4 h3
 
 -- 6.2.04 (Theorem 6.5)
--- example : ∀ (n : ℕ) (hn : 1 ≤ n), Nat.factorial n <= n ^ n := by
---     apply Nat.le_induction
---     · norm_num
---     · intro k hn h1
---       rw[Nat.factorial_succ]
---       have h2 : (k + 1) * Nat.factorial k <= (k + 1) * k ^ k := by
---         rw[mul_le_mul_left]
---         exact h1
---       have h3 : (k + 1) * k ^ k < (k + 1) * (k + 1) ^ k := by
---         rw[mul_le_mul_left (k+1)]
---         -- exercise 6.2
---       have h4 : (k + 1) * (k + 1) ^ k = (k + 1) ^ (k + 1) := by
+ example : ∀ (n : ℕ) (hn : 1 ≤ n), Nat.factorial n <= n ^ n := by
+     apply Nat.le_induction
+     · norm_num
+     · intro k hn h1
+       rw[Nat.factorial_succ]
+       have h2 : (k + 1) * Nat.factorial k <= (k + 1) * k ^ k := by
+         rw[mul_le_mul_left]
+         exact h1
+       have h3 : (k + 1) * k ^ k < (k + 1) * (k + 1) ^ k := by
+         rw[mul_le_mul_left (k+1)]
+         -- exercise 6.2
+       have h4 : (k + 1) * (k + 1) ^ k = (k + 1) ^ (k + 1) := by
+       sorry
+      sorry
 
 
--- Theorem 6.6
+-- 6.2.05 (Theorem 6.6)
+
 --example : ∀ (n : ℕ) (hn : 1 ≤ n), (Finset.sum (Finset.range n) fun i => i) = n * (n - 1) / 2 := by
 --  apply Finset.sum_range_induction
 
-example :  ∀ (n : ℕ), ∑ i in range (n + 1), i = n * (n + 1) / 2 := by
+exampl (n : ℕ) : ∑ i in range (n + 1), i = n * (n + 1) / 2 := by
   symm; apply Nat.div_eq_of_eq_mul_right (by norm_num : 0 < 2)
   induction' n with n ih
   · simp
@@ -107,15 +112,16 @@ example :  ∀ (n : ℕ), ∑ i in range (n + 1), i = n * (n + 1) / 2 := by
   ring
 
 -- This was in the text book (Section 5.2), I think it is the same problem as therorem 6.6 from the Math 300 textbook, right?
-
 --theorem sum_id (n : ℕ) : ∑ i in range (n + 1), i = n * (n + 1) / 2 := by
- -- symm; apply Nat.div_eq_of_eq_mul_right (by norm_num : 0 < 2)
- -- induction' n with n ih
- -- · simp
- -- rw [Finset.sum_range_succ, mul_add 2, ← ih, Nat.succ_eq_add_one]
- -- ring
 
--- 6.2.04 (Theorem 6.8)
+
+-- 6.2.06 (Theorem 6.7)
+
+example (n : ℕ) : ∏ i in range n, (4 * i - 2) = (2 * n)! / n! := by
+  sorry
+  --induction' n with n ih
+
+-- 6.2.07 (Theorem 6.8)
 example : ∀ (n : ℕ) (hn : 1 ≤ n), n^2 - n >= 0 := by
   intro n
   rw[pow_two n]
