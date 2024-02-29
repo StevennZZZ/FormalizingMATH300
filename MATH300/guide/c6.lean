@@ -95,12 +95,25 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n), 2 ^ n >= 2 * n := by
 --       have h4 : (k + 1) * (k + 1) ^ k = (k + 1) ^ (k + 1) := by
 
 
-
--- Theorem 6.5
-
 -- Theorem 6.6
-example : ∀ (n : ℕ) (hn : 1 ≤ n), (Finset.sum (Finset.range n) fun i => i) = n * (n - 1) / 2 := by
-  sorry
+--example : ∀ (n : ℕ) (hn : 1 ≤ n), (Finset.sum (Finset.range n) fun i => i) = n * (n - 1) / 2 := by
+--  apply Finset.sum_range_induction
+
+example :  ∀ (n : ℕ), ∑ i in range (n + 1), i = n * (n + 1) / 2 := by
+  symm; apply Nat.div_eq_of_eq_mul_right (by norm_num : 0 < 2)
+  induction' n with n ih
+  · simp
+  rw [Finset.sum_range_succ, mul_add 2, ← ih, Nat.succ_eq_add_one]
+  ring
+
+-- This was in the text book (Section 5.2), I think it is the same problem as therorem 6.6 from the Math 300 textbook, right?
+
+--theorem sum_id (n : ℕ) : ∑ i in range (n + 1), i = n * (n + 1) / 2 := by
+ -- symm; apply Nat.div_eq_of_eq_mul_right (by norm_num : 0 < 2)
+ -- induction' n with n ih
+ -- · simp
+ -- rw [Finset.sum_range_succ, mul_add 2, ← ih, Nat.succ_eq_add_one]
+ -- ring
 
 -- 6.2.04 (Theorem 6.8)
 example : ∀ (n : ℕ) (hn : 1 ≤ n), n^2 - n >= 0 := by
