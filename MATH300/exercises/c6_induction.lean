@@ -128,9 +128,10 @@ example : ∀ (n : ℕ) (hn : 1 ≤ n) , ∃ m , n * (n+1) = 2 * m := by
   intro n hn
   --apply?
   refine ex_of_PSigma
-  sorry
+sorry
 
 -- 6.6 Let n be a positive integer. Use induction to prove that
+
 example (n : ℤ) : ∑ i in range n, i * i! = (n + 1)! -1 := by
 sorry
 
