@@ -40,9 +40,14 @@ example {n : ℤ} : Equivalence (Int.ModEq n) := by
 -- For any positive integer m, every integer is congruent
 -- to exactly one element of the set {0,1,2,...,m − 1}
 -- modulo m.
-theorem e_t : ∀ m : ℕ, ∃ z ∈ Finset.range m, m ≡ z [ZMOD m] := by
-  intro m
-  sorry
+theorem e_t : ∀ m : ℕ, m > 0 → ∃ z ∈ Finset.range m, m ≡ z [ZMOD m] := by
+  intros m h
+  exists 0
+  constructor
+  simp
+  linarith
+  rw [Int.modEq_iff_dvd]
+  simp
 
 
 -- 8.3.01 (Theorem 8.3)
