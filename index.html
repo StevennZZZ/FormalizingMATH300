@@ -82,10 +82,39 @@
             padding: 20px;
         }
 
+        /* 选择顶级的列表项并为它们添加外边距 */
+        .sidebar > ul > li {
+            margin-bottom: 30px; /* 调整这个值以设置所需的间距 */
+        }
+
+
         main {
             margin-left: 320px;
             padding: 20px;
         }
+
+        .hidden {
+            display: none;
+        }
+
+        /* 将以下样式添加到您现有的 <style> 标签内 */
+        #expand-all, #collapse-all {
+            display: block;
+            width: 90%; /* Adjust as necessary */
+            margin: 10px auto;
+            padding: 5px;
+            cursor: pointer;
+            background-color: #e7e7e7; /* Light grey background */
+            border: none;
+            border-radius: 5px;
+        }
+
+        /* Optional: Add hover effect for buttons */
+        #expand-all:hover, #collapse-all:hover {
+            background-color: #dcdcdc; /* Slightly darker grey on hover */
+        }
+
+
 
 
     </style>
@@ -97,22 +126,68 @@
     </header>
     <nav class="sidebar">
         <ul>
-            <li><a href="#c1">Chapter 1: Preliminaries</a></li>
-            <li><a href="#c2">Chapter 2: Logic and mathematical language</a></li>
-            <li><a href="#c3">Chapter 3: Writing Proofs</a></li>
-            <li><a href="#c4">Chapter 4: Proofs Involving Quantifiers</a></li>
-            <li><a href="#c5">Chapter 5: Sets</a></li>
-            <li><a href="#c6">Chapter 6: Proofs by Induction</a></li>
-            <li><a href="#c7">Chapter 7: Relations</a></li>
-            <li><a href="#c8">Chapter 8: Congruences</a></li>
-            <li><a href="#c9">Chapter 9: Functions</a></li>
-            <li><a href="#c10">Chapter 10: Cardinality</a></li>
-            <li><a href="#c11">Chapter 11: Dependent Type Theory</a></li>
+            <li class="chapter">
+                <a href="#c1">Chapter 1: Preliminaries</a>
+                <ul>
+                    <li><a href="#c1-0">1.0 Introduction to Lean 4 - Interactive Proof Assistant</a></li>
+                    <li><a href="#c1-1">1.1. Elementary properties of the integers</a></li>
+                    <li><a href="#c1-2">1.2. Definitions</a></li>
+                    <li><a href="#c1-3">1.3. Elementary properties of the integers (again)</a></li>
+                </ul>
+            </li>
+            <li class="chapter">
+                <a href="#c2">Chapter 2: Logic and mathematical language</a>
+                <ul>
+                    <li><a href="#c2-1">2.1. Negations (¬)</a></li>
+                    <li><a href="#c2-2">2.2. And (∧) and Or (∨) / Conjunction and Disjunction</a></li>
+                    <li><a href="#c2-3">2.3 If, then</a></li>
+                    <li><a href="#c2-4">2.4. Quantifiers</a></li>
+                </ul>
+            </li>
+            <li class="chapter">
+                <a href="#c3">Chapter 3: Writing Proofs</a>
+                <ul>
+                    <li><a href="#c3-1">3.1. Direct Proofs</a></li>
+                    <li><a href="#c3-2">3.2. Proof by Cases (a.k.a. proof by exhaustion)</a></li>
+                    <li><a href="#c3-3">3.3. Proof by contrapositive</a></li>
+                    <li><a href="#c3-4">3.4. Proof by contradiction</a></li>
+                    <li><a href="#c3-5">3.5. Proof of an if-and-only-if Statement</a></li>
+                </ul>
+            </li>
+            <li class="chapter">
+                <a href="#c4">Chapter 4: Proofs Involving Quantifiers</a>
+                <ul>
+                    <li><a href="#c4-1">4.1. Proofs of for all statements</a></li>
+                    <li><a href="#c4-2">4.2. Proofs of there exist statements</a></li>
+                    <li><a href="#c4-3">4.3. Existence and uniqueness</a></li>
+                </ul>
+            </li>
+            <li class="chapter">
+                <a href="#c5">Chapter 5: Sets</a>
+                <ul>
+                    <li><a href="#c5-0">5.0. Type</a></li>
+                    <li><a href="#c5-1">5.1. Union</a></li>
+                    <li><a href="#c5-2">5.2. Intersection</a></li>
+                    <li><a href="#c5-3">5.2. Intersection</a></li>
+                    <li><a href="#c5-4">5.4. Set equality</a></li>
+                    <li><a href="#c5-5">5.5. Set Difference</a></li>
+                    <li><a href="#c5-6">5.6. Sets of sets</a></li>
+                </ul>
+            </li>
+            <li class="chapter"><a href="#c6">Chapter 6: Proofs by Induction</a></li>
+            <li class="chapter"><a href="#c7">Chapter 7: Relations</a></li>
+            <li class="chapter"><a href="#c8">Chapter 8: Congruences</a></li>
+            <li class="chapter"><a href="#c9">Chapter 9: Functions</a></li>
+            <li class="chapter"><a href="#c10">Chapter 10: Cardinality</a></li>
+            <li class="chapter"><a href="#c11">Chapter 11: Dependent Type Theory</a></li>
         </ul>
+        <button id="expand-all">Open All</button>
+        <button id="collapse-all">Close All</button>
     </nav>
     <main>
         <section id="c1">
             <h2>Chapter 1: Preliminaries</h2>
+            <section id="c1-0"></section>
             <h3>1.0. Introduction to Lean 4 - Interactive Proof Assistant</h3>
 <p>Congratulations on taking your first step toward writing formal mathematical proofs!</p>
 <p>When I was taking this course and doing the homework, I was always wondering:
@@ -171,6 +246,7 @@ can be achieved by a <strong>single command</strong> in Lean!!
 I'm sure you will never regret learning this skill in your academic and career life :)
 </p>
 <p>Get ready? Then let's start!</p>
+<section id="c1-1"></section>
             <h3>1.1. Elementary properties of the integers</h3>
 <dfn><div class="box">Review:</div></dfn>
 <ul>
@@ -380,6 +456,7 @@ Well, we will go over how those properties are implemented in Lean 4 in this cha
 but I need to introduce something else before that.
 </li>
 </ol>
+<section id="c1-2"></section>
             <h3>1.2. Definitions</h3>
 <dfn><div class="box">Review:</div></dfn>
 <ur>
@@ -486,6 +563,7 @@ so we need the <code class="single_command">use</code> tactic to give the specif
 Here, to prove that 20 is an even number,
 we need to show that 20 = 2 * k for some integer k.
 Clearly, k = 10, so we <code class="single_command">use 10</code>.
+<section id="c1-3"></section>
             <h3>1.3. Elementary properties of the integers (again)</h3>
 <p>Now it's time to go back to the table on page 9 of the textbook: Elementary Properties of the Integers (EPIs).</p>
 <p>
@@ -870,6 +948,7 @@ which is not very interesting.
 However, as Mathematics is the art of <em>relations</em>,
 things get more interesting when we study a statement that consists of more than one variable using <strong>logical connectives</strong>.
 </p>
+<section id="c2-1"></section>
             <h3>2.1. Negations (¬)</h3>
 <dfn><div class="box">Review:</div></dfn>
 <p>
@@ -925,6 +1004,7 @@ Try to evaluate the following. See the difference?
 <p>
 We can see that the "double negation" restores the original truth value.
 </p>
+<section id="c2-2"></section>
             <h3>2.2. And (∧) and Or (∨) / Conjunction and Disjunction</h3>
 <dfn><div class="box">Review:</div></dfn>
 <ul>
@@ -1292,6 +1372,7 @@ Therefore, ¬(P ∨ Q) ≡ ¬P ∧ ¬Q.
         We will discover another way of expressing that in the "if and only if" section. 
     </li>
 </ol>
+<section id="c2-3"></section>
             <h3>2.3 If, then</h3>
 <p>
 Here it is, our protagonist in this chapter!
@@ -1525,7 +1606,6 @@ example {P Q : Prop} (h : P → Q) : ¬Q → ¬P := by
   contrapose!
   exact h
 </code></pre>
-
             <h4>2.3.2. if and only if</h4>
 <p><strong><em>Definition 2.2.</em></strong> The statement P <strong>if and only if</strong> Q, written P ↔ Q, is equivalent to the statement
     (P → Q) and (Q → P).</p>
@@ -1592,6 +1672,7 @@ example {P Q : Prop} (h1 :  P → Q) (h2 : Q → P) : P ↔ Q := by
 In VS Code, type "\iff" for "↔". 
 "iff" means "if and only if".
 </p>
+<section id="c2-4"></section>
             <h3>2.4. Quantifiers</h3>
 <p>One last thing before we end this chapter.</p>
 <dfn><div class="box">Review: </div></dfn>
@@ -1833,6 +1914,7 @@ And most importantly, the calculational proof shows that in order to prove somet
 it is common to make progress <strong>step by step</strong>,
 which therefore leads to the discussion about "direct proofs".
 </p>
+<section id="c3-1"></section>
             <h3>3.1. Direct Proofs</h3>
 <dfn><div class="box">Review: </div></dfn>
 <p>
@@ -1992,6 +2074,7 @@ After we complete the proof of a subgoal, we exit this indentation block,
 and Lean will show us the main goal again.
 Then you can use this new hypothesis and some tactics to close this main goal as usual.
 </p>
+<section id="c3-2"></section>
             <h3>3.2. Proof by Cases (a.k.a. proof by exhaustion)</h3>
 <p>
 From last chapter, 
@@ -2160,6 +2243,7 @@ use the <code class="single_command">contrapose!</code> tactic.
 </p>
 <dfn><div class="box">In Lean: </div></dfn>
 <div class="unfinished">theorem 3.6, 3.7 proof. </div>
+<section id="c3-4"></section>
             <h3>3.4. Proof by contradiction</h3>
 <p>
 That's it! This is my favorite form of proof :) Let's see why and how it works.
@@ -2272,6 +2356,7 @@ Remark: <code class="single_command">contradiction</code> can close any goal wit
 Remember that if the hypothesis is false, the the statement is vacuously true, right?
 </p>
 <div class="unfinished">theorem 3.8, 3.9, 3.10 proof. might use intro</div>
+<section id="c3-5"></section>
             <h3>3.5. Proof of an if-and-only-if Statement</h3>
 <p>
     Suppose we want to prove (P ↔ Q) in Lean, and we know that (P ↔ Q) is the same as (P → Q) ∧ (Q → P),
@@ -2285,6 +2370,7 @@ Remember that if the hypothesis is false, the the statement is vacuously true, r
         <section>
             <section id="c4">
             <h2>Chapter 4: Proofs Involving Quantifiers</h2>
+            <section id="c4-1"></section>
             <h3>4.1. Proofs of <em>for all</em> statements</h3> 
 <dfn><div class="box">Review: </div></dfn>
 <p>
@@ -2305,6 +2391,7 @@ a variable to your assumption and reduce your goal to <code class="single_comman
 This tactic is sooooooooo useful!
 </p>
 <div class="unfinished">theorem 4.1 proof</div>
+<section id="c4-2"></section>
             <h3>4.2. Proofs of <em>there exist</em> statements</h3> 
 <dfn><div class="box">Review: </div></dfn>
 <p>
@@ -2347,6 +2434,7 @@ Then we construct a specific example <code class="single_command">1 - a</code>
 and use it to replace b in the goal. Then the goal is reduced to an algebraic expression with variable,
 and we can use <code class="single_command">ring</code> to close the goal.
 </p>
+<section id="c4-3"></section>
             <h3>4.3. Existence and uniqueness</h3> 
 <p>
 To prove "existence" (∃), we only need to give one example. 
@@ -2408,6 +2496,7 @@ it's a set of integers. <code class="single_command">#check</code>
 command can show the <strong>type</strong> of a certain expression.
 </p>
 <p>Wait, what is a <strong>type</strong>?</p>
+<section id="c5-0"></section>
             <h3>5.0. Type</h3>
 <p>
 If you have some programming experience,
@@ -2505,6 +2594,7 @@ with their implementations in Lean 4,
 and you already know all the tactics we will be using!
 Before that, let's take a break :)
 </p>
+<section id="c5-1"></section>
             <h3>5.1. Union</h3>
 <p>
 For this chapter, I will first declare some variables of sets for all the examples
@@ -2520,6 +2610,7 @@ variable {α : Type} {A B C D : Set α}
 <li>A ∪ B = B ∪ A</li>
 <li>A ∪ A = A</li>
 </ul>
+<section id="c5-2"></section>
             <h3>5.2. Intersection</h3>
 <dfn><div class="box">Review: </div></dfn>
 <ul>
@@ -2528,6 +2619,7 @@ variable {α : Type} {A B C D : Set α}
 <li>A ∩ A = A</li>
 <li>A and B are disjoint ↔ A ∩ B = ∅</li>
 </ul>
+<section id="c5-3"></section>
             <h3>5.3. Subsets</h3>
 <dfn><div class="box">Review: </div></dfn>
 <ul>
@@ -2589,6 +2681,7 @@ then <code class="single_command">h1 h2</code> outputs <code class="single_comma
 You can think of a conditional statement as a function that takes the proof of the hypothesis as an input and outputs the conclusion.
 In this case, <code class="single_command">(h1 : P → Q)</code> is a function that takes <code class="single_command">(h2 : P)</code> as an input and outputs <code class="single_command">Q</code>.
 </ul>
+<section id="c5-4"></section>
             <h3>5.4. Set equality</h3>
 <dfn><div class="box">Review: </div></dfn>
 <ul>
@@ -2602,6 +2695,7 @@ so we need to use a theorem from the package "Mathlib.Data.Set.Basic" called <co
 In practice, if the goal is <code class="single_command">A = B</code>, then
 <code class="single_command">rw [Set.Subset.antisymm_iff]</code> changes the goal to <code class="single_command">A ⊆ B ∧ B ⊆ A</code>.
 </p>
+<section id="c5-5"></section>
             <h3>5.5. Set Difference</h3>
 <dfn><div class="box">Review: </div></dfn>
 <ul>
@@ -2688,6 +2782,7 @@ example : A \ (B ∪ C) = (A \ B) ∩ (A \ C) := by
 The proof looks scary, but if you can understand the proof on the textbook, then you can also understand this one.
 At the second half of this guide we will introduce some other techniques for writing shorter proofs in Lean.
 </p>
+<section id="c5-6"></section>
             <h3>5.6. Sets of sets</h3>
 <dfn><div class="box">Review: </div></dfn>
 <ul>
@@ -2743,6 +2838,62 @@ command for definition, intro two at the same time, find theorems by self
     <footer>
 
     </footer>
+
+    <script>
+        // 当页面加载完成时执行函数
+        window.onload = function() {
+          // 获取所有的h2元素，它们代表章节标题
+          const chapterHeaders = document.querySelectorAll('nav.sidebar ul > li > a');
+      
+          // 为每个章节标题添加点击事件监听器
+          chapterHeaders.forEach(header => {
+            header.addEventListener('click', function(event) {
+              // 获取点击的标题对应的子目录
+              const subMenu = this.nextElementSibling;
+      
+              // 如果存在子目录，切换其显示/隐藏
+              if (subMenu && subMenu.tagName === 'UL') {
+                subMenu.classList.toggle('hidden');
+                event.preventDefault(); // 阻止默认跳转行为
+      
+                // 页面跳转到对应章节位置
+                const chapterId = this.getAttribute('href').substring(1);
+                const chapterElement = document.getElementById(chapterId);
+                if (chapterElement) {
+                  chapterElement.scrollIntoView(); // 移除平滑滚动，进行即时跳转
+                }
+              } else {
+                // 如果没有子目录，就执行默认的锚点跳转
+                window.location.hash = this.getAttribute('href');
+              }
+            });
+          });
+        }
+
+        window.onload = function() {
+            // 初始加载页面时隐藏所有子目录
+            document.querySelectorAll('nav.sidebar ul > li > ul').forEach(function(subMenu) {
+                subMenu.classList.add('hidden');
+            });
+
+            // 为展开所有按钮添加事件监听器
+            document.getElementById('expand-all').addEventListener('click', function() {
+                document.querySelectorAll('nav.sidebar ul > li > ul').forEach(function(subMenu) {
+                    subMenu.classList.remove('hidden');
+                });
+            });
+
+            // 为隐藏所有按钮添加事件监听器
+            document.getElementById('collapse-all').addEventListener('click', function() {
+                document.querySelectorAll('nav.sidebar ul > li > ul').forEach(function(subMenu) {
+                    subMenu.classList.add('hidden');
+                });
+            });
+        };
+
+      </script>
+      
+      
 
 </body>
 </html>
