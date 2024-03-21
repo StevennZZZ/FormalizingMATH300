@@ -130,6 +130,16 @@
             /* 其他样式根据需要添加，例如背景色、边框等 */
         }
 
+        main {
+            transition: margin-left 0.3s; /* 添加过渡效果 */
+            margin-left: 320px; /* 初始时与侧边栏有间隙 */
+            padding: 20px;
+        }
+
+        .full-width {
+            margin-left: 0; /* 当侧边栏隐藏时，移除左边距 */
+        }
+
 
 
 
@@ -2862,59 +2872,53 @@ command for definition, intro two at the same time, find theorems by self
 
     <script>
         window.onload = function() {
-            // 获取所有的章节标题
             const chapterHeaders = document.querySelectorAll('nav.sidebar ul > li > a');
+            const mainContent = document.querySelector('main'); 
     
-            // 为每个章节标题添加点击事件监听器
             chapterHeaders.forEach(header => {
                 header.addEventListener('click', function(event) {
                     const subMenu = this.nextElementSibling;
     
-                    // 如果存在子目录，切换其显示/隐藏
                     if (subMenu && subMenu.tagName === 'UL') {
                         subMenu.classList.toggle('hidden');
-                        event.preventDefault(); // 阻止默认跳转行为
+                        event.preventDefault(); 
     
                         const chapterId = this.getAttribute('href').substring(1);
                         const chapterElement = document.getElementById(chapterId);
                         if (chapterElement) {
-                            chapterElement.scrollIntoView(); // 移除平滑滚动，进行即时跳转
+                            chapterElement.scrollIntoView(); 
                         }
                     } else {
-                        // 如果没有子目录，就执行默认的锚点跳转
                         window.location.hash = this.getAttribute('href');
                     }
                 });
             });
     
-            // 初始加载页面时隐藏所有子目录
             document.querySelectorAll('nav.sidebar ul > li > ul').forEach(function(subMenu) {
                 subMenu.classList.add('hidden');
             });
     
-            // 为展开所有按钮添加事件监听器
             document.getElementById('expand-all').addEventListener('click', function() {
                 document.querySelectorAll('nav.sidebar ul > li > ul').forEach(function(subMenu) {
                     subMenu.classList.remove('hidden');
                 });
             });
     
-            // 为隐藏所有按钮添加事件监听器
             document.getElementById('collapse-all').addEventListener('click', function() {
                 document.querySelectorAll('nav.sidebar ul > li > ul').forEach(function(subMenu) {
                     subMenu.classList.add('hidden');
                 });
             });
     
-            // 为侧边栏切换按钮添加事件监听器
             document.getElementById('toggle-sidebar-btn').addEventListener('click', function() {
                 const sidebar = document.querySelector('.sidebar');
                 sidebar.classList.toggle('sidebar-hidden');
-                // 更新切换按钮的文本
+                mainContent.classList.toggle('full-width'); // 控制主内容区域的宽度
                 this.textContent = sidebar.classList.contains('sidebar-hidden') ? 'Open Bar' : 'Close Bar';
             });
         };
     </script>
+    
     
     
       
