@@ -114,6 +114,26 @@
             background-color: #dcdcdc; /* Slightly darker grey on hover */
         }
 
+        .sidebar {
+            transition: left 0.3s; /* 添加平滑的过渡效果 */
+        }
+
+        .sidebar-hidden {
+            left: -350px; /* 当sidebar隐藏时，将其向左移出屏幕 */
+        }
+
+        #toggle-sidebar-btn {
+            position: fixed;
+            left: 10px;
+            top: 10px; /* 或者 bottom: 0，取决于您希望按钮出现的位置 */
+            z-index: 1000; /* 确保按钮在最上层 */
+            /* 其他样式根据需要添加，例如背景色、边框等 */
+        }
+
+
+
+
+
 
 
 
@@ -124,6 +144,7 @@
     <header>
         <h1>MATH300 in Lean 4</h1>
     </header>
+    <button id="toggle-sidebar-btn">Close Bar</button>
     <nav class="sidebar">
         <ul>
             <li class="chapter">
@@ -2840,58 +2861,62 @@ command for definition, intro two at the same time, find theorems by self
     </footer>
 
     <script>
-        // 当页面加载完成时执行函数
         window.onload = function() {
-          // 获取所有的h2元素，它们代表章节标题
-          const chapterHeaders = document.querySelectorAll('nav.sidebar ul > li > a');
-      
-          // 为每个章节标题添加点击事件监听器
-          chapterHeaders.forEach(header => {
-            header.addEventListener('click', function(event) {
-              // 获取点击的标题对应的子目录
-              const subMenu = this.nextElementSibling;
-      
-              // 如果存在子目录，切换其显示/隐藏
-              if (subMenu && subMenu.tagName === 'UL') {
-                subMenu.classList.toggle('hidden');
-                event.preventDefault(); // 阻止默认跳转行为
-      
-                // 页面跳转到对应章节位置
-                const chapterId = this.getAttribute('href').substring(1);
-                const chapterElement = document.getElementById(chapterId);
-                if (chapterElement) {
-                  chapterElement.scrollIntoView(); // 移除平滑滚动，进行即时跳转
-                }
-              } else {
-                // 如果没有子目录，就执行默认的锚点跳转
-                window.location.hash = this.getAttribute('href');
-              }
+            // 获取所有的章节标题
+            const chapterHeaders = document.querySelectorAll('nav.sidebar ul > li > a');
+    
+            // 为每个章节标题添加点击事件监听器
+            chapterHeaders.forEach(header => {
+                header.addEventListener('click', function(event) {
+                    const subMenu = this.nextElementSibling;
+    
+                    // 如果存在子目录，切换其显示/隐藏
+                    if (subMenu && subMenu.tagName === 'UL') {
+                        subMenu.classList.toggle('hidden');
+                        event.preventDefault(); // 阻止默认跳转行为
+    
+                        const chapterId = this.getAttribute('href').substring(1);
+                        const chapterElement = document.getElementById(chapterId);
+                        if (chapterElement) {
+                            chapterElement.scrollIntoView(); // 移除平滑滚动，进行即时跳转
+                        }
+                    } else {
+                        // 如果没有子目录，就执行默认的锚点跳转
+                        window.location.hash = this.getAttribute('href');
+                    }
+                });
             });
-          });
-        }
-
-        window.onload = function() {
+    
             // 初始加载页面时隐藏所有子目录
             document.querySelectorAll('nav.sidebar ul > li > ul').forEach(function(subMenu) {
                 subMenu.classList.add('hidden');
             });
-
+    
             // 为展开所有按钮添加事件监听器
             document.getElementById('expand-all').addEventListener('click', function() {
                 document.querySelectorAll('nav.sidebar ul > li > ul').forEach(function(subMenu) {
                     subMenu.classList.remove('hidden');
                 });
             });
-
+    
             // 为隐藏所有按钮添加事件监听器
             document.getElementById('collapse-all').addEventListener('click', function() {
                 document.querySelectorAll('nav.sidebar ul > li > ul').forEach(function(subMenu) {
                     subMenu.classList.add('hidden');
                 });
             });
+    
+            // 为侧边栏切换按钮添加事件监听器
+            document.getElementById('toggle-sidebar-btn').addEventListener('click', function() {
+                const sidebar = document.querySelector('.sidebar');
+                sidebar.classList.toggle('sidebar-hidden');
+                // 更新切换按钮的文本
+                this.textContent = sidebar.classList.contains('sidebar-hidden') ? 'Open Bar' : 'Close Bar';
+            });
         };
-
-      </script>
+    </script>
+    
+    
       
       
 
