@@ -12,3 +12,4 @@ require mathlib from git
 lean_lib «MyProject» {
   -- add any library configuration options here
 }
+lean_lib MATH300
