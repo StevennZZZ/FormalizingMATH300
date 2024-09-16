@@ -5,149 +5,135 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MATH300 in Lean 4</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        header {
-            text-align: center;
-            padding: 10px;
-            background-color: #f2f2f2;
-        }
-
-        main {
-            padding: 20px;
-        }
-
-        section {
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 20px;
-            margin-bottom: 20px;
-        }
-
-        code {
-            color:dodgerblue;
-        }
-
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #f2f2f2;
-        }
-
-        .unfinished {
-            color:rgb(255, 0, 8);
-            text-decoration-line: underline;
-            text-decoration-style: wavy;
-        }
-
-        .single_command {
-            color:rgb(179, 0, 255);
-        }
-
-        .sorry {
-            color:crimson
-        }
-
-        .comment {
-            color:darkgreen;
-        }
-
-        .lines {
-            color:dodgerblue;
-        }
-
-        .box{
-            width: 70px;
-            height: 18px;
-            border: 1px solid black;
-            margin: 0;
-            padding: 0;
-        }
-        /*added directory part*/
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 300px;
-            height: 100%;
-            background-color: #f2f2f2;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        /* 选择顶级的列表项并为它们添加外边距 */
-        .sidebar > ul > li {
-            margin-bottom: 30px; /* 调整这个值以设置所需的间距 */
-        }
-
-
-        main {
-            margin-left: 320px;
-            padding: 20px;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        /* 将以下样式添加到您现有的 <style> 标签内 */
-        #expand-all, #collapse-all {
-            display: block;
-            width: 90%; /* Adjust as necessary */
-            margin: 10px auto;
-            padding: 5px;
-            cursor: pointer;
-            background-color: #e7e7e7; /* Light grey background */
-            border: none;
-            border-radius: 5px;
-        }
-
-        /* Optional: Add hover effect for buttons */
-        #expand-all:hover, #collapse-all:hover {
-            background-color: #dcdcdc; /* Slightly darker grey on hover */
-        }
-
-        .sidebar {
-            transition: left 0.3s; /* 添加平滑的过渡效果 */
-        }
-
-        .sidebar-hidden {
-            left: -350px; /* 当sidebar隐藏时，将其向左移出屏幕 */
-        }
-
-        #toggle-sidebar-btn {
-            position: fixed;
-            left: 10px;
-            top: 10px; /* 或者 bottom: 0，取决于您希望按钮出现的位置 */
-            z-index: 1000; /* 确保按钮在最上层 */
-            /* 其他样式根据需要添加，例如背景色、边框等 */
-        }
-
-        main {
-            transition: margin-left 0.3s; /* 添加过渡效果 */
-            margin-left: 320px; /* 初始时与侧边栏有间隙 */
-            padding: 20px;
-        }
-
-        .full-width {
-            margin-left: 0; /* 当侧边栏隐藏时，移除左边距 */
-        }
-
-
-
-
-
-
-
-
-    </style>
+      body {
+          font-family: Arial, sans-serif;
+          margin: 20px;
+      }
+  
+      header {
+          text-align: center;
+          padding: 10px;
+          background-color: #f2f2f2;
+      }
+  
+      main {
+          padding: 20px;
+          /* margin-left: 320px; */ /* Commented out for disabling sidebar effect */
+      }
+  
+      section {
+          border-bottom: 1px solid #ccc;
+          padding-bottom: 20px;
+          margin-bottom: 20px;
+      }
+  
+      code {
+          color: dodgerblue;
+      }
+  
+      table, th, td {
+          border: 1px solid black;
+          border-collapse: collapse;
+      }
+  
+      footer {
+          text-align: center;
+          padding: 10px;
+          background-color: #f2f2f2;
+      }
+  
+      .unfinished {
+          color: rgb(255, 0, 8);
+          text-decoration-line: underline;
+          text-decoration-style: wavy;
+      }
+  
+      .single_command {
+          color: rgb(179, 0, 255);
+      }
+  
+      .sorry {
+          color: crimson;
+      }
+  
+      .comment {
+          color: darkgreen;
+      }
+  
+      .lines {
+          color: dodgerblue;
+      }
+  
+      .box {
+          width: 70px;
+          height: 18px;
+          border: 1px solid black;
+          margin: 0;
+          padding: 0;
+      }
+  
+      /* Sidebar effect disabled temporarily */
+      /* .sidebar {
+          position: fixed;
+          left: 0;
+          top: 0;
+          width: 300px;
+          height: 100%;
+          background-color: #f2f2f2;
+          overflow-y: auto;
+          padding: 20px;
+      }
+  
+      .sidebar > ul > li {
+          margin-bottom: 30px;
+      }
+  
+      main {
+          margin-left: 320px;
+          padding: 20px;
+      }
+  
+      #expand-all, #collapse-all {
+          display: block;
+          width: 90%;
+          margin: 10px auto;
+          padding: 5px;
+          cursor: pointer;
+          background-color: #e7e7e7;
+          border: none;
+          border-radius: 5px;
+      }
+  
+      #expand-all:hover, #collapse-all:hover {
+          background-color: #dcdcdc;
+      }
+  
+      .sidebar {
+          transition: left 0.3s;
+      }
+  
+      .sidebar-hidden {
+          left: -350px;
+      }
+  
+      #toggle-sidebar-btn {
+          position: fixed;
+          left: 10px;
+          top: 10px;
+          z-index: 1000;
+      }
+  
+      main {
+          transition: margin-left 0.3s;
+          margin-left: 320px;
+          padding: 20px;
+      }
+  
+      .full-width {
+          margin-left: 0;
+      } */
+  </style>
+  
 </head>
 <body>
 
@@ -767,7 +753,7 @@ with <code class="single_command">(h : a ≤ b)</code>
 0 ≤ a^2, where a^2 = a · a. <br>
 In Lean: <br>
 <code class="single_command">sq_nonneg a</code> for (0 ≤ a^2)<br>
-<code class="single_command">sr a</code> for (a^2 = a * a)
+<code class="single_command">pow_two a</code> for (a^2 = a * a)
 </li>
 <!--25-->
 <li>
@@ -1102,7 +1088,7 @@ Because now we have <em>two</em> variables in a statement,
 we have <em>four</em> possibilities in total, as shown above.
 You can see the pattern here:
 Each time we add a variable to our statement, we double the combinations.
-Therefore, a statement with <strong>n</strong> propositional variables has <strong>2^n</strong> combinations.
+Therefore, a statement with <strong>n</strong> propositional variables has <strong>2^n</strong> combinations. (Take MATH 394 if you wonder why :)
 </p>
 <dfn><div class="box">In Lean:</div></dfn>
 <p>
@@ -1228,7 +1214,7 @@ can you make conclusion that (P is true)?
 Or similarly, can you say that (Q is true)?
 </p>
 <p>
-Boom! You can't :) 
+Boom! You can't.
 </p>
 <p>
 If you look at the truth table, you can see that 
@@ -1682,7 +1668,7 @@ You can see that in order for P ↔ Q to be true,
 P and Q should have the same truth value (they should be both true or both false),
 which means that P and Q should be <strong>logically equivalent</strong>.
 This gives us another way of defining logical equivalence: 
-<strong>P ≡ Q if P ↔ Q</strong>.
+<strong>P ≡ Q if P ↔ Q is true</strong>.
 </p>
 <p>
 Also, since P ↔ Q is defined by (P → Q) ∧ (Q → P).
@@ -1748,7 +1734,7 @@ Therefore, there are also four situations to consider:
 <p>Some mathematical concepts are defined using quantifiers.
 We've seen in chapter 1 that the definitions of "divisibility" and "parity" both include existential quantifiers 
 (e.g. The integer x is even if <em>there exists</em> an integer k such that x = k + k).
-Did you remember how to prove the goal with "there exists" or "for some"? The <code class="single_command">use</code> tactic :D
+Did you remember how to prove the goal with "there exists" or "for some"? The <code class="single_command">use</code> tactic!
 </p>
 <pre><code class="snippet"><div class="comment">-- 2.4.01 (a)</div>
 example : ∃ n : ℝ, |n| > 0 := by
@@ -2780,11 +2766,12 @@ theorem c3_11 {a : ℤ} : Odd a ↔ Even (a^2 - 1) := by
     rw [h2]
     ring  
 </code></pre>
-        </section>
 <p>
-Whoa, we just proved so many theorems in Lean! 
-You made it! Great job :D
+  Whoa, we just proved so many theorems in Lean! 
+  You made it! Great job :D
 </p>
+        </section>
+
 
         <section>
             <section id="c4">
@@ -2803,13 +2790,26 @@ is equivalent to the statement "<em>if x is an integer, then P(x).</em>"
 <p>
 Therefore, we can use the same method to prove a statement with "for all..." and a statement with "if..."
 by <strong>introducing</strong> an arbitrary variable and reduce our goal to the remaining part of the statements.
-Does it ring a bell? Yes! The <code class="single_command">intro</code> tactic! 
+Rings a bell? Yes! The <code class="single_command">intro</code> tactic! 
 Whenever you see something like (∀ x..., P(x)) or (if x ..., then P(x)), 
 use <code class="single_command">intro x</code> to add x as 
 a variable to your assumption and reduce your goal to <code class="single_command">P(x)</code>.
 This tactic is sooooooooo useful!
 </p>
-<div class="unfinished">theorem 4.1 proof</div>
+<li><strong>Theorem 4.1. </strong>Let a, b, and c be integers and suppose that c|a and c|b. For all integers n and m,
+  c|(an + bm).</li>
+  <dfn><div class="box">In Lean: </div></dfn>
+<pre><code class="snippet"><div class="comment">-- 4.1.01 Let a, b, and c be integers and suppose that c|a and c|b.
+--        For all integers n and m, c|(an + bm).</div>
+  example {a b c : ℤ} (h1 : c ∣ a) (h2 : c ∣ b) : ∀ n m : ℤ, c ∣ (a * n + b * m) := by
+  cases' h1 with k1 h1
+  cases' h2 with k2 h2
+  intro n m
+  use k1 * n + k2 * m
+  rw [h1]
+  rw [h2]
+  ring
+</code></pre>
 <section id="c4-2"></section>
             <h3>4.2. Proofs of <em>there exist</em> statements</h3> 
 <dfn><div class="box">Review: </div></dfn>
@@ -2835,7 +2835,7 @@ Then the goal is reduced to an expression with numbers, and we can use
 <code class="single_command">norm_num</code> to close the goal.
 </p>
 <pre><code class="snippet"><div class="comment">-- 4.2.02 For every integer a, there exists an integer b such that a + b = 1.</div>
-example : ∀ a : ℤ, ∃ b : ℤ, a + b = 1 := by
+  theorem c4_eg  : ∀ a : ℤ, ∃ b : ℤ, a + b = 1 := by
   intro a
   use 1 - a
   ring
@@ -2871,9 +2871,69 @@ But after some deduction, we find that the two examples are actually the same.
 <p>
 I know it sounds a little bit abstract. 
 Let's follow the textbook and see how to prove uniqueness in Lean.
-</p>
 <dfn><div class="box">In Lean: </div></dfn>
-<div class="unfinished">theorem 4.2, 4.3 proof, intro to dsimp</div>
+<pre><code class="snippet"><div class="comment">-- 4.3.01 (Theorem 4.2.) For every integer a, there exists a UNIQUE integer b such that a + b = 1.</div>
+  theorem c4_2 : ∀ a : ℤ, ∃! b : ℤ, a + b = 1 := by
+    intro a
+    apply exists_unique_of_exists_of_unique
+    · exact c4_eg a  -- "use" the theorem (the same as conditional statement)
+    · intro b c
+      intro h1
+      intro h2
+      have h3 : b = 1 - a := by
+        linarith
+      have h4 : c = 1 - a := by
+        linarith
+      rw [h3, h4]
+</code></pre>
+</p>
+<p>
+ At the second line, we use a theorem called <code class="single_command">exists_unique_of_exists_of_unique</code>.
+ This is the <strong>ONLY THEOREM</strong> we need to prove uniqueness in Lean. 
+ Here is the definition of it:
+ <code class="single_command">exists_unique_of_exists_of_unique.{u} {α : Sort u} {p : α → Prop} (hex : ∃ x, p x)
+  (hunique : ∀ (y₁ y₂ : α), p y₁ → p y₂ → y₁ = y₂) : ∃! x, p x</code>
+</p>
+<p>Again, look at the parentheses for the required inputs. 
+  In order to get the output <code class="single_command">∃! x, p x</code>,
+  we need to give the theorem two hypotheses: 
+  <code class="single_command">(hex : ∃ x, p x)</code>
+  and <code class="single_command">(hunique : ∀ (y₁ y₂ : α), p y₁ → p y₂ → y₁ = y₂)</code>.
+  The first hypothesis is the "give an example" part, which is easy.
+  The second step means "assume that there exist two examples y₁ and y₂ that both satisfy the proposition,
+  then y₁ = y₂". It follows the same logic as how the textbook proves uniqueness!
+  Since we <code class="single_command">apply</code> this theorem, 
+  the goal is changed back to two subgoals: <code class="single_command">hex</code> and <code class="single_command">hunique</code>.
+  We just proved <code class="single_command">hex</code> in the last section and named it <code class="single_command">c4_eg</code>, so we can use it directly.
+  To the <code class="single_command">hunique</code> part, 
+  just use the same proof as the one from textbook. You have all the tools to prove it in Lean:)
+</p>
+<p>One more example from textbook:
+<pre><code class="snippet"><div class="comment">-- 4.3.02 (Theorem 4.3.) For every integer a, there is a unique integer b such that 10a + 2b = 4.</div>
+theorem c4_3 : ∀ a : ℤ, ∃! b : ℤ, 10 * a + 2 * b = 4 := by
+  intro a
+  apply exists_unique_of_exists_of_unique
+  · use 2 - 5 * a
+    ring
+  · intro b c h1 h2
+    have h3 : 10 * a + 2 * b = 10 * a + 2 * c := by
+      rw [h1, h2]
+    have h4 : 2 * b = 2 * c := by
+      linarith
+    have h5 : 0 = 2 * (c - b) := by
+      linarith
+    have h6 : (2 : ℤ)  = 0 ∨ c - b = 0 := by
+      exact mul_eq_zero.1 (Eq.symm h5)  -- EPI 15
+    cases' h6 with h7 h8
+    · norm_num at h7
+    · linarith  -- based on h8
+</code></pre>
+To h6 part, notice that I explicitly tell Lean that 2 is an integer here <code class="single_command">(2 : ℤ)</code>.
+If I don't do that, then 2 is by default a natural number, which is a little bit tricky to deal with when applying a theorem that's supposed to deal with integers. (and Lean will throw an error if I don't do that!).
+As a rule of thumb, every time you see Lean throws an error when you apply a theorem of integers, 
+just cast an explicit number you use to an integer, and the issue would be magically solved sometimes...
+</p>
+Congratulations! Four chapters done!
         </section>
 
         <section>
